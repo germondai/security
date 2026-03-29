@@ -1,0 +1,29 @@
+{
+  "name": "@germondai/security-cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "gsec": "./bin/gsec.mjs"
+  },
+  "scripts": {
+    "lint": "echo 'lint: skipped (eslint not configured yet)'",
+    "typecheck": "tsc --noEmit",
+    "test": "echo 'test: no CLI tests in v0.1'",
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist .tsbuildinfo .turbo",
+    "gsec": "node bin/gsec.mjs"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "@germondai/security": "workspace:*",
+    "citty": "^0.1.6",
+    "picocolors": "^1.0.1"
+  },
+  "devDependencies": {
+    "@germondai/tsconfig": "workspace:*",
+    "@types/bun": "^1.1.0",
+    "@types/node": "^20.12.0",
+    "typescript": "^5.5.0"
+  }
+}
