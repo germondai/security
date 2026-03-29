@@ -1,0 +1,132 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TURBO_TELEMETRY_DISABLED: 1
+  BUN_VERSION: 1.3.14
+  NODE_VERSION: 20
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with: { bun-version: ${{ env.BUN_VERSION }} }
+      - uses: actions/setup-node@v4
+        with: { node-version: ${{ env.NODE_VERSION }} }
+      - uses: actions/cache@v4
+        with: { path: .turbo, key: turbo-lint-${{ github.ref }}, restore-keys: turbo-lint- }
+      - run: bun install --frozen-lockfile
+      - run: bunx turbo run lint --concurrency=2
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with: { bun-version: ${{ env.BUN_VERSION }} }
+      - uses: actions/setup-node@v4
+        with: { node-version: ${{ env.NODE_VERSION }} }
+      - uses: actions/cache@v4
+        with: { path: .turbo, key: turbo-typecheck-${{ github.ref }}, restore-keys: turbo-typecheck- }
+      - run: bun install --frozen-lockfile
+      - run: bunx turbo run typecheck --concurrency=2
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with: { bun-version: ${{ env.BUN_VERSION }} }
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            .turbo
+          key: bun-test-${{ github.ref }}-${{ hashFiles('bun.lockb') }}
+          restore-keys: |
+            bun-test-${{ github.ref }}-
+            bun-test-
+      - run: bun install --frozen-lockfile
+      - run: bunx turbo run test --concurrency=2
+
+  build:
+    name: Build
+    needs: [lint, typecheck, test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with: { bun-version: ${{ env.BUN_VERSION }} }
+      - uses: actions/setup-node@v4
+        with: { node-version: ${{ env.NODE_VERSION }} }
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .turbo
+            apps/cli/dist
+            packages/security/dist
+          key: turbo-build-${{ github.ref }}
+          restore-keys: turbo-build-
+      - run: bun install --frozen-lockfile
+      - run: bunx turbo run build --concurrency=2
+      - uses: actions/upload-artifact@v4
+        with: { name: gsec-cli, path: apps/cli/dist, if-no-files-found: error, retention-days: 7 }
+      - uses: actions/upload-artifact@v4
+        with: { name: gsec-web, path: apps/web/dist,  if-no-files-found: error, retention-days: 7 }
+
+  cli-smoke:
+    name: CLI smoke
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with: { bun-version: ${{ env.BUN_VERSION }} }
+      - uses: actions/setup-node@v4
+        with: { node-version: ${{ env.NODE_VERSION }} }
+      - run: bun install --frozen-lockfile
+      - run: bunx turbo run build --filter=@germondai/security-cli --concurrency=1
+      - run: chmod +x apps/cli/bin/gsec.mjs
+      - name: default password length 24
+        run: |
+          set -euo pipefail
+          OUT=$(node apps/cli/bin/gsec.mjs gen password -l 24)
+          [ "${#OUT}" -eq 24 ] || { echo "expected 24, got ${#OUT}: $OUT"; exit 1; }
+      - name: --no-symbols excludes symbols
+        run: |
+          set -euo pipefail
+          OUT=$(node apps/cli/bin/gsec.mjs gen password -l 64 --no-symbols)
+          echo "$OUT" | grep -qE "[!@#$%^&*()_=+\\[\\]{};:,.<>?/~]" && { echo "found symbols"; exit 1; } || true
+          echo "$OUT" | grep -qE "^[A-Za-z0-9]+$"
+      - name: -r (requireEach) guarantees each class
+        run: |
+          set -euo pipefail
+          OUT=$(node apps/cli/bin/gsec.mjs gen password -l 16 -r)
+          echo "$OUT" | grep -qE "[a-z]"   || { echo "missing lower";  exit 1; }
+          echo "$OUT" | grep -qE "[A-Z]"   || { echo "missing upper";  exit 1; }
+          echo "$OUT" | grep -qE "[0-9]"   || { echo "missing digit";  exit 1; }
+          echo "$OUT" | grep -qE "[!@#$%^&*()_=+\\[\\]{};:,.<>?/~]" || { echo "missing symbol"; exit 1; }
+      - name: -x (excludeAmbiguous) removes ambiguous chars
+        run: |
+          set -euo pipefail
+          OUT=$(node apps/cli/bin/gsec.mjs gen password -l 128 -x)
+          echo "$OUT" | grep -qE "[0Oo1lI|\`'"]" && { echo "found ambiguous"; exit 1; } || true
