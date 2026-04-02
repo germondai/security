@@ -1,0 +1,289 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Theme variables ----------
+   Bitwarden-inspired: calm neutral backgrounds + blue primary + green/red
+   status colors. Tuned so dark-theme body text contrasts >= 7:1 against
+   the background (WCAG AAA for normal text). */
+:root, [data-theme="light"] {
+  --bg:           252 252 250;   /* near-white, very faint warm tint */
+  --bg-soft:      244 246 248;
+  --bg-hover:     236 240 244;
+  --fg:           24 32 44;      /* near-black with blue undertone */
+  --fg-muted:     92 104 122;    /* readable secondary text */
+  --fg-faint:     140 150 168;
+  --accent:       23 93 220;     /* Bitwarden primary blue */
+  --accent-soft:  225 235 252;
+  --accent-2:     212 162 58;    /* amber accent for highlights */
+  --border:       220 224 230;
+  --border-strong: 200 208 218;
+  --grid:         234 238 244;
+  --danger:       200 40 50;     /* Bitwarden red */
+  --danger-soft:  252 230 232;
+  --ok:           22 128 67;     /* Bitwarden green */
+  --ok-soft:      226 244 232;
+  --warn:         184 92 18;     /* warm amber for warnings */
+  --warn-soft:    252 238 220;
+  --shadow:       15 27 46;
+}
+:root[data-theme="dark"], [data-theme="dark"] {
+  --bg:           16 20 28;      /* deep slate */
+  --bg-soft:      28 34 46;
+  --bg-hover:     38 46 60;
+  --fg:           235 240 248;   /* near-white, slightly cool */
+  --fg-muted:     168 178 196;   /* readable muted text */
+  --fg-faint:     120 132 152;
+  --accent:       94 158 255;    /* brighter blue for dark surfaces */
+  --accent-soft:  34 52 88;
+  --accent-2:     240 200 100;
+  --border:       52 62 80;
+  --border-strong: 76 88 110;
+  --grid:         30 36 48;
+  --danger:       240 110 110;
+  --danger-soft:  80 30 38;
+  --ok:           80 200 130;
+  --ok-soft:      26 60 42;
+  --warn:         240 180 80;
+  --warn-soft:    80 56 22;
+  --shadow:       0 0 0;
+}
+
+/* System preference is the default when the user has not chosen anything.
+   We respect prefers-color-scheme unless the html element has an explicit
+   data-theme attribute (set by the theme toggle composable). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg:           16 20 28;
+    --bg-soft:      28 34 46;
+    --bg-hover:     38 46 60;
+    --fg:           235 240 248;
+    --fg-muted:     168 178 196;
+    --fg-faint:     120 132 152;
+    --accent:       94 158 255;
+    --accent-soft:  34 52 88;
+    --accent-2:     240 200 100;
+    --border:       52 62 80;
+    --border-strong: 76 88 110;
+    --grid:         30 36 48;
+    --danger:       240 110 110;
+    --danger-soft:  80 30 38;
+    --ok:           80 200 130;
+    --ok-soft:      26 60 42;
+    --warn:         240 180 80;
+    --warn-soft:    80 56 22;
+    --shadow:       0 0 0;
+  }
+}
+
+@layer base {
+  * { border-color: rgb(var(--border)); }
+  html, body, #app { min-height: 100%; }
+  body {
+    background-color: rgb(var(--bg));
+    color: rgb(var(--fg));
+    font-family: 'Inter', 'SF Pro Text', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-feature-settings: 'cv11' on, 'ss01' on;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection { background: rgb(var(--accent) / 0.30); color: rgb(var(--fg)); }
+  h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.015em; }
+  code, pre, kbd, samp {
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.92em;
+  }
+  /* Strip default underline decoration everywhere. Hover gets only a
+     subtle color shift on inline text links — no underlines. */
+  a {
+    color: rgb(var(--accent));
+    text-decoration: none;
+    border-bottom: none;
+    transition: color 100ms;
+  }
+  a:hover { color: rgb(var(--accent)); filter: brightness(0.9); }
+  input[type='text'], input[type='number'], input[type='password'], textarea, select {
+    background: rgb(var(--bg));
+    color: rgb(var(--fg));
+    border: 1px solid rgb(var(--border-strong));
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    width: 100%;
+    transition: border-color 120ms, box-shadow 120ms, background 120ms;
+  }
+  input[type='text']:hover, input[type='number']:hover, textarea:hover, select:hover {
+    border-color: rgb(var(--fg-faint));
+  }
+  input[type='text']:focus, input[type='number']:focus, input[type='password']:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: rgb(var(--accent));
+    box-shadow: 0 0 0 3px rgb(var(--accent) / 0.18);
+    background: rgb(var(--bg-soft));
+  }
+  textarea { min-height: 6rem; resize: vertical; }
+  input[type='checkbox'] { accent-color: rgb(var(--accent)); width: 1.05rem; height: 1.05rem; cursor: pointer; }
+  input[type='range'] { accent-color: rgb(var(--accent)); width: 100%; }
+  ::placeholder { color: rgb(var(--fg-faint)); }
+}
+
+@layer components {
+  .card {
+    background: rgb(var(--bg));
+    border: 1px solid rgb(var(--border));
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgb(var(--shadow) / 0.04), 0 1px 2px rgb(var(--shadow) / 0.06);
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--border-strong));
+    background: rgb(var(--bg-soft));
+    font-size: 0.72rem;
+    color: rgb(var(--fg-muted));
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+  .pill-accent { color: rgb(var(--accent)); border-color: rgb(var(--accent) / 0.4); background: rgb(var(--accent-soft)); }
+  .pill-amber  { color: rgb(var(--warn)); border-color: rgb(var(--warn) / 0.4); background: rgb(var(--warn-soft)); }
+  .pill-danger { color: rgb(var(--danger)); border-color: rgb(var(--danger) / 0.4); background: rgb(var(--danger-soft)); }
+  .pill-ok     { color: rgb(var(--ok)); border-color: rgb(var(--ok) / 0.4); background: rgb(var(--ok-soft)); }
+  .kbd {
+    display: inline-block;
+    padding: 0.12rem 0.45rem;
+    border: 1px solid rgb(var(--border-strong));
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    background: rgb(var(--bg-soft));
+    color: rgb(var(--fg-muted));
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    border: 1px solid rgb(var(--border-strong));
+    border-radius: 8px;
+    background: rgb(var(--bg));
+    color: rgb(var(--fg));
+    font-family: inherit;
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: background 120ms, border-color 120ms, color 120ms, transform 80ms;
+    user-select: none;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn:hover { background: rgb(var(--bg-hover)); border-color: rgb(var(--fg-faint)); }
+  .btn:active { background: rgb(var(--bg-soft)); transform: translateY(0.5px); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-accent {
+    background: rgb(var(--accent));
+    color: rgb(255 255 255);
+    border-color: rgb(var(--accent));
+  }
+  .btn-accent:hover { filter: brightness(1.06); background: rgb(var(--accent)); border-color: rgb(var(--accent)); }
+  .btn-danger {
+    background: rgb(var(--bg));
+    color: rgb(var(--danger));
+    border-color: rgb(var(--danger) / 0.5);
+  }
+  .btn-danger:hover { background: rgb(var(--danger-soft)); border-color: rgb(var(--danger)); }
+  .btn-ghost {
+    border-color: transparent;
+    background: transparent;
+  }
+  .btn-ghost:hover { background: rgb(var(--bg-hover)); border-color: rgb(var(--border)); }
+
+  /* Full-width tab bar — each tab uses equal width via grid. */
+  .tab-bar {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    border: 1px solid rgb(var(--border));
+    border-radius: 10px;
+    background: rgb(var(--bg-soft));
+  }
+  .tab-bar > button,
+  .tab-bar > .tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.55rem 0.75rem;
+    border: none;
+    background: transparent;
+    color: rgb(var(--fg-muted));
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 500;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background 100ms, color 100ms;
+    white-space: nowrap;
+  }
+  .tab-bar > button:hover,
+  .tab-bar > .tab:hover { background: rgb(var(--bg)); color: rgb(var(--fg)); }
+  .tab-bar > button[aria-pressed='true'],
+  .tab-bar > button.is-active,
+  .tab-bar > .tab.is-active {
+    background: rgb(var(--bg));
+    color: rgb(var(--accent));
+    box-shadow: 0 1px 2px rgb(var(--shadow) / 0.06);
+  }
+
+  .field-label {
+    display: block;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgb(var(--fg-muted));
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  .ascii-divider {
+    color: rgb(var(--border));
+    user-select: none;
+    white-space: pre;
+    overflow: hidden;
+    line-height: 1.4;
+  }
+  .pre-block {
+    background: rgb(var(--bg-soft));
+    color: rgb(var(--fg));
+    border: 1px solid rgb(var(--border));
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    max-width: 100%;
+    white-space: pre;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+  .pre-block code { color: rgb(var(--accent)); }
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2.5rem 1rem;
+    color: rgb(var(--fg-muted));
+    text-align: center;
+    font-size: 0.9rem;
+  }
+}
