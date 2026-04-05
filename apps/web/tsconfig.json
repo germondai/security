@@ -1,0 +1,11 @@
+{
+  "extends": "@germondai/tsconfig/vue.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": { "@/*": ["./src/*"] }
+  },
+  "include": [
+    "src/**/*",
+    "src/**/*.vue"
+  ]
+}
