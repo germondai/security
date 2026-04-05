@@ -1,0 +1,74 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import { generatePassphrase } from '@germondai/security';
+import CopyButton from '@/components/shared/CopyButton.vue';
+import CliCommandBox from '@/components/shared/CliCommandBox.vue';
+
+const words = ref(5);
+const separator = ref('-');
+const capitalize = ref(false);
+const includeNumber = ref(false);
+const seed = ref(0);
+
+const phrase = computed(() => {
+  void seed.value;
+  return generatePassphrase({
+    words: words.value, separator: separator.value,
+    capitalize: capitalize.value, includeNumber: includeNumber.value,
+  });
+});
+
+const bits = computed(() => words.value * 9.97);
+function regenerate() { seed.value++; }
+
+const cli = computed(() => {
+  const parts = ['bun cli gen passphrase', `--words ${words.value}`];
+  if (separator.value !== '-') parts.push(`--separator '${separator.value}'`);
+  if (capitalize.value)   parts.push('--capitalize');
+  if (includeNumber.value) parts.push('--with-number');
+  return parts.join(' ');
+});
+</script>
+
+<template>
+  <article class="space-y-6">
+    <header class="space-y-2">
+      <h1 class="text-2xl font-bold">▸ Passphrase generator</h1>
+      <p class="text-[0.9rem] text-[rgb(var(--fg-muted))]">Diceware-style. 5 words ≈ 50 bits. Up to 32 words.</p>
+    </header>
+
+    <div class="card p-5 space-y-5">
+      <div class="flex items-stretch gap-2">
+        <div class="flex-1 break-all rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--bg))] px-3 py-3 font-mono text-[1.05rem] tracking-wide">{{ phrase }}</div>
+        <button class="btn" @click="regenerate" aria-label="Regenerate">↻</button>
+        <CopyButton :value="phrase" />
+      </div>
+
+      <p class="text-[0.85rem] text-[rgb(var(--fg-muted))]">
+        Estimated entropy: <span class="font-mono text-[rgb(var(--accent))]">~{{ bits.toFixed(0) }} bits</span>
+        <span v-if="bits < 50" class="ml-2 text-[rgb(var(--danger))]">— consider at least 5 words</span>
+        <span v-else-if="bits >= 70" class="ml-2 text-[rgb(var(--ok))]">— strong</span>
+      </p>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label class="field-label">Words: <span class="text-[rgb(var(--accent))]">{{ words }}</span></label>
+          <input type="range" :min="2" :max="32" :step="1" v-model.number="words" class="w-full" />
+        </div>
+        <div>
+          <label class="field-label">Separator</label>
+          <input type="text" v-model="separator" maxlength="3" class="font-mono" />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-[0.9rem]">
+        <label class="flex items-center gap-2"><input type="checkbox" v-model="capitalize" /> Capitalize each word</label>
+        <label class="flex items-center gap-2"><input type="checkbox" v-model="includeNumber" /> Append a random 0-999</label>
+      </div>
+
+      <div class="space-y-1 border-t pt-4">
+        <label class="field-label">Equivalent CLI command</label>
+        <CliCommandBox :command="cli" />
+      </div>
+    </div>
+  </article>
+</template>
