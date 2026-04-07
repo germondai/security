@@ -1,0 +1,29 @@
+{
+  "name": "@germondai/security",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "lint": "echo 'lint: skipped (eslint not configured yet)'",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist .tsbuildinfo .turbo"
+  },
+  "devDependencies": {
+    "@germondai/tsconfig": "workspace:*",
+    "@types/bun": "^1.1.0",
+    "@types/node": "^20.12.0",
+    "typescript": "^5.5.0"
+  }
+}
