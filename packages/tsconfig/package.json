@@ -1,0 +1,20 @@
+{
+  "name": "@germondai/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "files": [
+    "base.json",
+    "node-lib.json",
+    "node-app.json",
+    "browser-lib.json",
+    "vue.json"
+  ],
+  "scripts": {
+    "lint": "echo skip",
+    "typecheck": "echo skip",
+    "test": "echo skip",
+    "build": "echo skip",
+    "clean": "rm -rf .turbo"
+  }
+}

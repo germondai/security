@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Vue Application",
+  "extends": "./browser-lib.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "noEmit": true,
+    "allowImportingTsExtensions": false,
+    "types": ["node"],
+    "paths": { "@/*": ["./src/*"] }
+  },
+  "vueCompilerOptions": { "target": 3 },
+  "include": [
+    "src/**/*",
+    "src/**/*.vue",
+    "vite.config.ts",
+    "tailwind.config.ts",
+    "postcss.config.js",
+    "auto-imports.d.ts",
+    "components.d.ts"
+  ]
+}
