@@ -191,8 +191,8 @@ export async function passphraseWizard(): Promise<void> {
 
   const wordsStr = await p.text({
     message: 'How many words (2-32)',
-    placeholder: '5',
-    initialValue: '5',
+    placeholder: '8',
+    initialValue: '8',
     validate: (v) => {
       const n = Number.parseInt(String(v), 10);
       return Number.isInteger(n) && n >= 2 && n <= 32 ? undefined : 'Must be an integer in [2, 32]';
