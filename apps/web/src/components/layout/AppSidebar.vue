@@ -2,6 +2,9 @@
 import { RouterLink } from 'vue-router';
 import ThemeToggle from '@/components/shared/ThemeToggle.vue';
 
+const emit = defineEmits<{ (e: 'navigate'): void }>();
+function onNavigate() { emit('navigate'); }
+
 interface Item { to: string; label: string }
 interface Group { label: string; items: Item[] }
 
@@ -43,7 +46,7 @@ const groups: Group[] = [
 
 <template>
   <aside class="flex h-full w-72 flex-col gap-5 border-r border-[rgb(var(--border))] bg-[rgb(var(--bg-soft))] p-4">
-    <RouterLink to="/" class="group flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 hover:bg-[rgb(var(--bg))]">
+    <RouterLink to="/" @click="onNavigate" class="group flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 hover:bg-[rgb(var(--bg))]">
       <div class="flex items-center gap-2.5">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[rgb(var(--accent))]">
           <path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6z"></path>
@@ -64,6 +67,7 @@ const groups: Group[] = [
           v-for="i in g.items"
           :key="i.label"
           :to="i.to"
+          @click="onNavigate"
           class="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-[0.88rem] text-[rgb(var(--fg))] transition hover:bg-[rgb(var(--bg))]"
           active-class="!bg-[rgb(var(--bg))] text-[rgb(var(--accent))] font-semibold"
         >
@@ -73,8 +77,8 @@ const groups: Group[] = [
       </div>
     </nav>
 
-    <div class="border-t border-[rgb(var(--border))] pt-3 text-[0.78rem] leading-relaxed text-[rgb(var(--fg-muted))]">
-      made by
+    <div class="border-t border-[rgb(var(--border))] pt-3 text-[0.78rem] leading-relaxed text-[rgb(var(--fg-muted))] text-center">
+      Made by
       <a href="https://github.com/germondai" target="_blank" rel="noopener noreferrer" class="font-semibold">@germondai</a>
     </div>
   </aside>
