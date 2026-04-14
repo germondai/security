@@ -7,9 +7,21 @@ import {
   toBinary, fromBinary, toOctal, fromOctal, toDecimal, fromDecimal,
 } from '@germondai/security';
 import CopyButton from '@/components/shared/CopyButton.vue';
+import Select from '@/components/shared/Select.vue';
+import CliCommandBox from '@/components/shared/CliCommandBox.vue';
 
 type Enc = 'base64' | 'base64url' | 'base32' | 'base32hex' | 'base58' | 'hex' | 'binary' | 'octal' | 'decimal';
-const ENCS: Enc[] = ['base64', 'base64url', 'base32', 'base32hex', 'base58', 'hex', 'binary', 'octal', 'decimal'];
+const ENCS = [
+  { value: 'base64'    as Enc, label: 'base64' },
+  { value: 'base64url' as Enc, label: 'base64url' },
+  { value: 'base32'    as Enc, label: 'base32' },
+  { value: 'base32hex' as Enc, label: 'base32hex' },
+  { value: 'base58'    as Enc, label: 'base58' },
+  { value: 'hex'       as Enc, label: 'hex' },
+  { value: 'binary'    as Enc, label: 'binary' },
+  { value: 'octal'     as Enc, label: 'octal' },
+  { value: 'decimal'   as Enc, label: 'decimal' },
+];
 
 const mode = ref<'encode' | 'decode'>('encode');
 const fromEnc = ref<Enc>('base64');
@@ -22,7 +34,6 @@ const output = computed<string>(() => {
   if (!input.value) return '';
   try {
     if (mode.value === 'encode') {
-      // input is treated as text (UTF-8) -> encode
       const bytes = new TextEncoder().encode(input.value);
       switch (toEnc.value) {
         case 'base64':    return toBase64(bytes);
@@ -36,7 +47,6 @@ const output = computed<string>(() => {
         case 'decimal':   return toDecimal(bytes);
       }
     } else {
-      // decode from `fromEnc` -> text (UTF-8)
       let bytes: Uint8Array;
       switch (fromEnc.value) {
         case 'base64':    bytes = fromBase64(input.value); break;
@@ -66,6 +76,16 @@ function swap() {
     else toEnc.value = fromEnc.value;
   }
 }
+
+function clearInput() { input.value = ''; }
+
+const cli = computed(() => {
+  if (mode.value === 'encode') {
+    const inp = input.value ? input.value.replace(/"/g, '\\"').slice(0, 40) : 'hello';
+    return `bun cli encode --to ${toEnc.value} --input "${inp}"`;
+  }
+  return `bun cli decode --from ${fromEnc.value} --input "${input.value.slice(0, 40)}"`;
+});
 </script>
 
 <template>
@@ -77,27 +97,26 @@ function swap() {
       </p>
     </header>
 
-    <div class="card p-5 space-y-4">
-      <div class="flex flex-wrap items-center gap-2 text-[0.85rem]">
-        <div class="flex items-center gap-1 rounded-md border p-0.5">
-          <button type="button" @click="mode = 'encode'" :class="['btn !py-1 !px-2 !text-xs', mode === 'encode' ? 'btn-accent' : '']">encode</button>
-          <button type="button" @click="mode = 'decode'" :class="['btn !py-1 !px-2 !text-xs', mode === 'decode' ? 'btn-accent' : '']">decode</button>
+    <div class="card p-5 space-y-5">
+      <!-- Controls row: mode | from/to selector | actions -->
+      <div class="flex flex-wrap items-center gap-2">
+        <div class="tab-bar w-fit">
+          <button type="button" @click="mode = 'encode'" :aria-pressed="mode === 'encode'" :class="{ 'is-active': mode === 'encode' }">encode</button>
+          <button type="button" @click="mode = 'decode'" :aria-pressed="mode === 'decode'" :class="{ 'is-active': mode === 'decode' }">decode</button>
         </div>
-        <template v-if="mode === 'encode'">
-          <span class="text-[rgb(var(--fg-muted))]">text →</span>
-          <select v-model="toEnc" class="!w-auto !inline-block">
-            <option v-for="e in ENCS" :key="e" :value="e">{{ e }}</option>
-          </select>
-        </template>
-        <template v-else>
-          <select v-model="fromEnc" class="!w-auto !inline-block">
-            <option v-for="e in ENCS" :key="e" :value="e">{{ e }}</option>
-          </select>
-          <span class="text-[rgb(var(--fg-muted))]">→ text</span>
-        </template>
-        <button class="btn" @click="swap" :disabled="!output || !!error">↕ swap</button>
-        <button class="btn" @click="input = ''">clear</button>
-        <CopyButton :value="output" :disabled="!output" />
+
+        <div class="flex items-center gap-2">
+          <span v-if="mode === 'encode'" class="text-[0.88rem] text-[rgb(var(--fg-muted))]">text →</span>
+          <Select v-if="mode === 'encode'" v-model="toEnc"   :options="ENCS" aria-label="target encoding" />
+          <Select v-else                  v-model="fromEnc" :options="ENCS" aria-label="source encoding" />
+          <span v-if="mode === 'decode'" class="text-[0.88rem] text-[rgb(var(--fg-muted))]">→ text</span>
+        </div>
+
+        <div class="ml-auto flex items-center gap-2">
+          <button class="btn" @click="swap"     :disabled="!output || !!error" title="Swap input ↔ output">↕ swap</button>
+          <button class="btn" @click="clearInput" :disabled="!input" title="Clear input">clear</button>
+          <CopyButton :value="output" :disabled="!output" />
+        </div>
       </div>
 
       <div class="grid gap-4 md:grid-cols-2">
@@ -114,6 +133,11 @@ function swap() {
       </div>
 
       <p v-if="error" class="text-[0.85rem] text-[rgb(var(--danger))]" role="alert">{{ error }}</p>
+
+      <div class="space-y-1 border-t border-[rgb(var(--border))] pt-4">
+        <label class="field-label">Equivalent CLI command</label>
+        <CliCommandBox :command="cli" />
+      </div>
     </div>
   </article>
 </template>
