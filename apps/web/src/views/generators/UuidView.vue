@@ -85,15 +85,16 @@ const cli = computed(() => {
             {{ v.toUpperCase() }}
           </button>
         </div>
-        <label v-if="version === 'v4' || version === 'v7'" class="mt-3 flex items-center gap-2 text-[0.88rem]">
-          <input type="checkbox" v-model="upper" /> Uppercase output
+        <label v-if="version === 'v4' || version === 'v7'" class="mt-3 flex items-center gap-3 cursor-pointer text-[0.92rem] select-none">
+          <span class="switch" :class="{ 'is-on': upper }"><input type="checkbox" v-model="upper" class="sr-only" /><span class="switch-knob"></span></span>
+          <span>Uppercase output</span>
         </label>
       </div>
 
       <!-- Nano ID length -->
       <div v-if="kind === 'nanoid'">
         <label class="field-label">Length: <span class="text-[rgb(var(--accent))]">{{ size }}</span></label>
-        <input type="range" :min="1" :max="64" :step="1" v-model.number="size" class="w-full max-w-xs" />
+        <input type="range" :min="1" :max="64" :step="1" v-model.number="size" class="w-full" />
       </div>
 
       <!-- v3/v5 name input -->
@@ -105,7 +106,7 @@ const cli = computed(() => {
       <!-- Count slider -->
       <div>
         <label class="field-label">Count: <span class="text-[rgb(var(--accent))]">{{ count }}</span></label>
-        <input type="range" :min="1" :max="50" :step="1" v-model.number="count" class="w-full max-w-xs" />
+        <input type="range" :min="1" :max="50" :step="1" v-model.number="count" class="w-full" />
       </div>
 
       <!-- Action buttons -->
