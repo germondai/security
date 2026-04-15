@@ -53,15 +53,17 @@ const cli = computed(() => {
       </div>
       <div>
         <label class="field-label">Algorithm</label>
-        <div class="flex items-center gap-1 rounded-md border p-0.5 w-fit">
+        <div class="tab-bar">
           <button v-for="a in (['sha1','sha256','sha384','sha512'] as const)" :key="a"
             type="button" @click="alg = a"
-            :class="['btn !py-1 !px-3 !text-xs', alg === a ? 'btn-accent' : '']">{{ a.toUpperCase() }}</button>
+            :aria-pressed="alg === a"
+            :class="{ 'is-active': alg === a }">{{ a.toUpperCase() }}</button>
         </div>
       </div>
       <div>
-        <label class="flex items-center gap-2 text-[0.88rem]">
-          <input type="checkbox" v-model="useSalt" /> Add salt (keyed hash)
+        <label class="flex items-center gap-3 cursor-pointer text-[0.92rem] select-none">
+          <span class="switch" :class="{ 'is-on': useSalt }"><input type="checkbox" v-model="useSalt" class="sr-only" /><span class="switch-knob"></span></span>
+          <span>Add salt (keyed hash)</span>
         </label>
         <input v-if="useSalt" type="text" v-model="salt" placeholder="salt string…" class="font-mono mt-1" />
       </div>
