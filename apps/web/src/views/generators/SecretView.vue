@@ -45,7 +45,7 @@ const cli = computed(() => {
     <div class="card p-5 space-y-5">
       <div class="flex items-stretch gap-2">
         <div class="flex-1 break-all rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--bg))] px-3 py-2 font-mono text-[0.82rem]">{{ value }}</div>
-        <button class="btn" @click="regenerate">↻</button>
+        <button class="btn-icon" @click="regenerate">↻</button>
         <CopyButton :value="value" />
       </div>
 
@@ -55,20 +55,21 @@ const cli = computed(() => {
         <span v-else class="ml-2 text-[rgb(var(--ok))]">— strong key material</span>
       </p>
 
-      <div class="grid gap-4 sm:grid-cols-3">
-        <div>
+      <div class="space-y-4">
+        <div class="flex flex-col">
           <label class="field-label">Bytes: <span class="text-[rgb(var(--accent))]">{{ bytes }}</span></label>
           <input type="range" :min="8" :max="64" :step="1" v-model.number="bytes" class="w-full" />
         </div>
-        <div>
+        <div class="flex flex-col">
           <label class="field-label">Encoding (when no prefix)</label>
-          <div class="flex items-center gap-1 rounded-md border p-0.5">
+          <div class="tab-bar">
             <button v-for="e in (['hex','base64','base64url'] as const)" :key="e"
               type="button" @click="encoding = e" :disabled="!!prefix"
-              :class="['btn !py-1 !px-2 !text-xs flex-1', encoding === e ? 'btn-accent' : '', prefix ? 'opacity-50' : '']">{{ e }}</button>
+              :aria-pressed="encoding === e"
+              :class="{ 'is-active': encoding === e, 'opacity-50': !!prefix }">{{ e }}</button>
           </div>
         </div>
-        <div>
+        <div class="flex flex-col">
           <label class="field-label">Prefix (no whitespace)</label>
           <input type="text" v-model="prefix" placeholder="sk_live_, ghp_, better-auth_…" class="font-mono" :class="prefixError ? '!border-[rgb(var(--danger))]' : ''" />
           <p v-if="prefixError" class="mt-1 text-[0.75rem] text-[rgb(var(--danger))]">{{ prefixError }}</p>
