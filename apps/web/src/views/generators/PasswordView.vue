@@ -87,7 +87,7 @@ const cli = computed(() => {
       <div class="space-y-2">
         <div v-for="(pwd, idx) in outputs" :key="idx" class="flex items-stretch gap-2">
           <div class="flex-1 overflow-x-auto whitespace-nowrap rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--bg))] px-3 py-2.5 font-mono text-[0.95rem]">{{ pwd || '—' }}</div>
-          <button class="btn shrink-0" @click="regenerate" aria-label="Regenerate">↻</button>
+          <button class="btn-icon" @click="regenerate" aria-label="Regenerate">↻</button>
           <CopyButton :value="pwd" />
         </div>
       </div>
@@ -138,13 +138,31 @@ const cli = computed(() => {
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-[0.9rem] sm:grid-cols-3">
-        <label class="flex items-center gap-2"><input type="checkbox" v-model="lower" /> Lowercase (a–z)</label>
-        <label class="flex items-center gap-2"><input type="checkbox" v-model="upper" /> Uppercase (A–Z)</label>
-        <label class="flex items-center gap-2"><input type="checkbox" v-model="digits" /> Digits (0–9)</label>
-        <label class="flex items-center gap-2"><input type="checkbox" v-model="symbols" /> Symbols (!@#…)</label>
-        <label class="flex items-center gap-2"><input type="checkbox" v-model="excludeAmbiguous" /> Exclude ambiguous (0Oo1lI|`')</label>
-        <label class="flex items-center gap-2"><input type="checkbox" v-model="requireEach" /> Require each class</label>
+      <div class="grid grid-cols-1 gap-3 text-[0.9rem] sm:grid-cols-2 lg:grid-cols-3">
+        <label class="flex items-center gap-3 cursor-pointer select-none">
+          <span class="switch" :class="{ 'is-on': lower }"><input type="checkbox" v-model="lower" class="sr-only" /><span class="switch-knob"></span></span>
+          <span>Lowercase (a–z)</span>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer select-none">
+          <span class="switch" :class="{ 'is-on': upper }"><input type="checkbox" v-model="upper" class="sr-only" /><span class="switch-knob"></span></span>
+          <span>Uppercase (A–Z)</span>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer select-none">
+          <span class="switch" :class="{ 'is-on': digits }"><input type="checkbox" v-model="digits" class="sr-only" /><span class="switch-knob"></span></span>
+          <span>Digits (0–9)</span>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer select-none">
+          <span class="switch" :class="{ 'is-on': symbols }"><input type="checkbox" v-model="symbols" class="sr-only" /><span class="switch-knob"></span></span>
+          <span>Symbols (!@#…)</span>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer select-none">
+          <span class="switch" :class="{ 'is-on': excludeAmbiguous }"><input type="checkbox" v-model="excludeAmbiguous" class="sr-only" /><span class="switch-knob"></span></span>
+          <span>Exclude ambiguous (0Oo1lI|`')</span>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer select-none">
+          <span class="switch" :class="{ 'is-on': requireEach }"><input type="checkbox" v-model="requireEach" class="sr-only" /><span class="switch-knob"></span></span>
+          <span>Require each class</span>
+        </label>
       </div>
 
       <div class="space-y-1 border-t border-[rgb(var(--border))] pt-4">
