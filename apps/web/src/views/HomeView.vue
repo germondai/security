@@ -1,5 +1,17 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
+
+const heroCmd = ref('bun cli gen password --length 32');
+const heroCmdCopied = ref(false);
+
+async function copyHeroCmd() {
+  try {
+    await navigator.clipboard.writeText(heroCmd.value);
+    heroCmdCopied.value = true;
+    setTimeout(() => (heroCmdCopied.value = false), 1500);
+  } catch { /* clipboard unavailable */ }
+}
 
 const tools = [
   { to: '/generators/password',          icon: '◈', name: 'Password',           desc: 'Cryptographically random. All charset classes.' },
@@ -71,7 +83,15 @@ const cliExamples = [
             <span aria-hidden="true">→</span>
           </RouterLink>
           <RouterLink to="/analyzers/password-strength" class="btn">Check a password</RouterLink>
-          <code class="kbd whitespace-nowrap">bun cli gen password --length 32</code>
+          <button
+            type="button"
+            class="btn btn-ghost font-mono text-[0.82rem]"
+            :title="heroCmdCopied ? 'Copied!' : 'Click to copy'"
+            @click="copyHeroCmd"
+          >
+            <span aria-hidden="true">{{ heroCmdCopied ? '✓' : '$' }}</span>
+            <span>{{ heroCmd }}</span>
+          </button>
         </div>
       </div>
     </section>
