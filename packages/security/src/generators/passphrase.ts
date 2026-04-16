@@ -228,14 +228,14 @@ const WORDS: readonly string[] = [
 ];
 
 export interface PassphraseOptions {
-  words?: number;          // default 5
+  words?: number;          // default 8
   separator?: string;      // default '-'
   capitalize?: boolean;    // default false
   includeNumber?: boolean; // default false
 }
 
 export function generatePassphrase(opts: PassphraseOptions = {}): string {
-  const n = opts.words ?? 5;
+  const n = opts.words ?? 8;
   const sep = opts.separator ?? '-';
   if (n < 2 || n > 32) throw new RangeError('words must be in [2, 32]');
   const picked: string[] = new Array(n);
