@@ -98,25 +98,31 @@ const cli = computed(() => {
     </header>
 
     <div class="card p-5 space-y-5">
-      <!-- Controls row: mode | from/to selector | actions -->
-      <div class="flex flex-wrap items-center gap-2">
-        <div class="tab-bar w-fit">
-          <button type="button" @click="mode = 'encode'" :aria-pressed="mode === 'encode'" :class="{ 'is-active': mode === 'encode' }">encode</button>
-          <button type="button" @click="mode = 'decode'" :aria-pressed="mode === 'decode'" :class="{ 'is-active': mode === 'decode' }">decode</button>
-        </div>
+      <!-- Row 1: mode tabs full-width on mobile, fit on desktop -->
+      <div class="tab-bar w-full sm:w-fit">
+        <button type="button" @click="mode = 'encode'" :aria-pressed="mode === 'encode'" :class="{ 'is-active': mode === 'encode' }">encode</button>
+        <button type="button" @click="mode = 'decode'" :aria-pressed="mode === 'decode'" :class="{ 'is-active': mode === 'decode' }">decode</button>
+      </div>
 
-        <div class="flex items-center gap-2">
-          <span v-if="mode === 'encode'" class="text-[0.88rem] text-[rgb(var(--fg-muted))]">text →</span>
+      <!-- Row 2: label | arrow | select — flex with equal label/select and auto-sized
+                  arrow that sits exactly between them. -->
+      <div class="flex items-center gap-3">
+        <div class="flex-1 text-center sm:text-right">
+          <span v-if="mode === 'encode'" class="text-[0.9rem] text-[rgb(var(--fg-muted))]">text</span>
+          <span v-else class="text-[0.9rem] text-[rgb(var(--fg-muted))]">hex</span>
+        </div>
+        <span aria-hidden="true" class="shrink-0 text-[rgb(var(--fg-faint))]">→</span>
+        <div class="flex-1">
           <Select v-if="mode === 'encode'" v-model="toEnc"   :options="ENCS" aria-label="target encoding" />
           <Select v-else                  v-model="fromEnc" :options="ENCS" aria-label="source encoding" />
-          <span v-if="mode === 'decode'" class="text-[0.88rem] text-[rgb(var(--fg-muted))]">→ text</span>
         </div>
+      </div>
 
-        <div class="ml-auto flex items-center gap-2">
-          <button class="btn" @click="swap"     :disabled="!output || !!error" title="Swap input ↔ output">↕ swap</button>
-          <button class="btn" @click="clearInput" :disabled="!input" title="Clear input">clear</button>
-          <CopyButton :value="output" :disabled="!output" />
-        </div>
+      <!-- Row 3: swap + clear stretch evenly, copy button at the end. -->
+      <div class="flex items-stretch gap-2">
+        <button class="btn flex-1 justify-center" @click="swap"     :disabled="!output || !!error" title="Swap input ↔ output">↕ swap</button>
+        <button class="btn flex-1 justify-center" @click="clearInput" :disabled="!input" title="Clear input">clear</button>
+        <CopyButton :value="output" :disabled="!output" />
       </div>
 
       <div class="grid gap-4 md:grid-cols-2">
