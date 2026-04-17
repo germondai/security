@@ -46,19 +46,22 @@ const groups: Group[] = [
 
 <template>
   <aside class="flex h-full w-72 flex-col gap-5 border-r border-[rgb(var(--border))] bg-[rgb(var(--bg-soft))] p-4">
-    <RouterLink to="/" @click="onNavigate" class="group flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 hover:bg-[rgb(var(--bg))]">
-      <div class="flex items-center gap-2.5">
+    <!-- Brand row: the link to home wraps ONLY the brand mark+title; the
+         theme toggle sits next to it as a sibling so its click doesn't
+         navigate. -->
+    <div class="flex items-center justify-between gap-2 rounded-lg px-2 py-1.5">
+      <RouterLink to="/" @click="onNavigate" class="flex flex-1 items-center gap-2.5 rounded-md px-1 py-0.5 hover:bg-[rgb(var(--bg))]">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[rgb(var(--accent))]">
           <path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6z"></path>
           <path d="m9 12 2 2 4-4"></path>
         </svg>
         <div class="flex flex-col leading-tight">
-          <span class="text-[1rem] font-bold tracking-tight text-[rgb(var(--fg))]">gsec</span>
-          <span class="text-[0.65rem] uppercase tracking-wider text-[rgb(var(--fg-faint))]">stateless toolkit</span>
+          <span class="text-[0.98rem] font-bold tracking-tight text-[rgb(var(--fg))]">Germond's Security</span>
+          <span class="text-[0.65rem] text-[rgb(var(--fg-faint))]">cryptography toolkit</span>
         </div>
-      </div>
+      </RouterLink>
       <ThemeToggle />
-    </RouterLink>
+    </div>
 
     <nav class="flex flex-1 flex-col gap-4 overflow-y-auto">
       <div v-for="g in groups" :key="g.label" class="flex flex-col gap-1">

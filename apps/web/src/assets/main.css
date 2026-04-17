@@ -123,7 +123,7 @@
     box-shadow: 0 0 0 3px rgb(var(--accent) / 0.18);
     background: rgb(var(--bg-soft));
   }
-  textarea { min-height: 6rem; resize: vertical; }
+  textarea { min-height: 6rem; resize: vertical; max-width: 100%; }
   input[type='checkbox'] { accent-color: rgb(var(--accent)); width: 1.05rem; height: 1.05rem; cursor: pointer; }
   input[type='range'] { accent-color: rgb(var(--accent)); width: 100%; }
   /* Visually-hidden checkbox (used inside the custom .switch) */
@@ -236,14 +236,17 @@
   .tab-bar {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: 1fr;
+    grid-auto-columns: minmax(0, 1fr);
     gap: 0.2rem;
     height: 2.4rem;
     padding: 0.2rem;
     border: 1px solid rgb(var(--border));
     border-radius: 8px;
     background: rgb(var(--bg-soft));
+    overflow-x: auto;
+    scrollbar-width: none;
   }
+  .tab-bar::-webkit-scrollbar { display: none; }
   .tab-bar > button,
   .tab-bar > .tab {
     display: inline-flex;
@@ -251,6 +254,7 @@
     justify-content: center;
     gap: 0.35rem;
     height: 100%;
+    min-width: 0;
     padding: 0 0.75rem;
     border: none;
     background: transparent;
@@ -316,6 +320,11 @@
     text-align: center;
     font-size: 0.9rem;
   }
+
+  /* Hide the native horizontal scrollbar on text inputs that need to
+     scroll long content but look terrible on mobile. */
+  .scroll-x-hidden { overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
+  .scroll-x-hidden::-webkit-scrollbar { display: none; }
 
   /* Toggle switch — wraps a hidden checkbox. Use:
        <span class="switch" :class="{ 'is-on': model }">
