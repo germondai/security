@@ -39,9 +39,11 @@ function onChange(e: Event) {
 <style scoped>
 .ui-select {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 0.4rem;
+  width: 100%;
+  min-width: 0;
   height: 2.4rem;
   padding: 0 0.7rem;
   border: 1px solid rgb(var(--border-strong));
@@ -56,10 +58,11 @@ function onChange(e: Event) {
   user-select: none;
   transition: background 120ms, border-color 120ms, box-shadow 120ms;
   white-space: nowrap;
+  text-align: center;
 }
 .ui-select:hover { background: rgb(var(--bg-hover)); border-color: rgb(var(--fg-faint)); }
 .ui-select:focus-within { border-color: rgb(var(--accent)); box-shadow: 0 0 0 3px rgb(var(--accent) / 0.18); }
-.ui-select-value { line-height: 1; }
+.ui-select-value { line-height: 1; width: 100%; }
 .ui-select-chev { color: rgb(var(--fg-muted)); flex-shrink: 0; }
 /* Native select is invisible but covers the wrapper for native UI. */
 .ui-select-native {
