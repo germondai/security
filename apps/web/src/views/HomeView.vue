@@ -106,9 +106,9 @@ const cliExamples = [
 
     <!-- Tool grid -->
     <section class="space-y-4">
-      <div class="flex items-end justify-between">
-        <h2 class="text-2xl font-bold">All tools</h2>
-        <span class="text-[0.85rem] text-[rgb(var(--fg-muted))]">{{ tools.length }} generators, analyzers, hashes, ciphers</span>
+      <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+        <h2 class="text-2xl font-bold whitespace-nowrap">All tools</h2>
+        <span class="text-[0.85rem] text-[rgb(var(--fg-muted))] whitespace-nowrap">{{ tools.length }} generators, analyzers, hashes, ciphers</span>
       </div>
       <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <RouterLink
@@ -129,9 +129,9 @@ const cliExamples = [
 
     <!-- CLI quickstart -->
     <section class="space-y-3">
-      <div class="flex flex-wrap items-end justify-between gap-2">
-        <h2 class="text-2xl font-bold">CLI quickstart</h2>
-        <span class="text-[0.85rem] text-[rgb(var(--fg-muted))]">every tool also lives on the command line</span>
+      <div class="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+        <h2 class="text-2xl font-bold whitespace-nowrap">CLI quickstart</h2>
+        <span class="text-[0.85rem] text-[rgb(var(--fg-muted))] whitespace-nowrap">every tool also lives on the command line</span>
       </div>
       <div class="card overflow-hidden">
         <div class="flex items-center gap-2 border-b border-[rgb(var(--border))] bg-[rgb(var(--bg-soft))] px-4 py-2.5 text-[0.78rem] text-[rgb(var(--fg-muted))]">

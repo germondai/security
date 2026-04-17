@@ -18,11 +18,11 @@ const size = ref(21);
 const seed = ref(0);
 
 const kinds: { value: Kind; label: string; hint: string }[] = [
-  { value: 'uuid',   label: 'UUID',     hint: 'RFC 4122 (v1–v7)' },
-  { value: 'cuid',   label: 'CUID',     hint: '24-char URL-safe, prefix `c`' },
-  { value: 'nanoid', label: 'Nano ID',  hint: 'customizable length & alphabet' },
-  { value: 'ulid',   label: 'ULID',     hint: '26-char, time-sortable' },
-  { value: 'ksuid',  label: 'KSUID',    hint: '27-char Base62, time-sortable' },
+  { value: 'uuid',   label: 'UUID',  hint: 'RFC 4122 (v1–v7)' },
+  { value: 'cuid',   label: 'CUID',  hint: '24-char URL-safe, prefix `c`' },
+  { value: 'nanoid', label: 'Nano',  hint: 'Nano ID — customizable length' },
+  { value: 'ulid',   label: 'ULID',  hint: '26-char, time-sortable' },
+  { value: 'ksuid',  label: 'KSUID', hint: '27-char Base62, time-sortable' },
 ];
 const versions: readonly UuidVersion[] = ['v1', 'v3', 'v4', 'v5', 'v7'];
 
