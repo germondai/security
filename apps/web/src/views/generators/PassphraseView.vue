@@ -38,9 +38,9 @@ const cli = computed(() => {
     </header>
 
     <div class="card p-5 space-y-5">
-      <div class="flex items-stretch gap-2">
-        <div class="flex-1 break-all rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--bg))] px-3 py-3 font-mono text-[1.05rem] tracking-wide">{{ phrase }}</div>
-        <button class="btn-icon" @click="regenerate" aria-label="Regenerate">↻</button>
+      <div class="flex items-stretch gap-2 min-w-0">
+        <div class="min-w-0 flex-1 flex items-center scroll-x-hidden whitespace-nowrap rounded-xl border border-[rgb(var(--border))] bg-[rgb(var(--bg))] px-3 h-[2.4rem] font-mono text-[1.05rem] tracking-wide">{{ phrase }}</div>
+        <button class="btn-icon shrink-0" @click="regenerate" aria-label="Regenerate">↻</button>
         <CopyButton :value="phrase" />
       </div>
 
@@ -60,15 +60,15 @@ const cli = computed(() => {
           <input type="text" v-model="separator" maxlength="3" class="font-mono" />
         </div>
       </div>
-      <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-[0.9rem]">
-        <label class="flex items-center gap-2 cursor-pointer">
+      <div class="space-y-3 text-[0.92rem] sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-2 sm:space-y-0">
+        <label class="flex items-center gap-3 cursor-pointer">
           <span class="switch" :class="{ 'is-on': capitalize }">
             <input type="checkbox" v-model="capitalize" class="sr-only" />
             <span class="switch-knob"></span>
           </span>
           <span>Capitalize each word</span>
         </label>
-        <label class="flex items-center gap-2 cursor-pointer">
+        <label class="flex items-center gap-3 cursor-pointer">
           <span class="switch" :class="{ 'is-on': includeNumber }">
             <input type="checkbox" v-model="includeNumber" class="sr-only" />
             <span class="switch-knob"></span>

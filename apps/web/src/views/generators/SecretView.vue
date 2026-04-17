@@ -43,9 +43,9 @@ const cli = computed(() => {
     </header>
 
     <div class="card p-5 space-y-5">
-      <div class="flex items-stretch gap-2">
-        <div class="flex-1 break-all rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--bg))] px-3 py-2 font-mono text-[0.82rem]">{{ value }}</div>
-        <button class="btn-icon" @click="regenerate">↻</button>
+      <div class="flex items-stretch gap-2 min-w-0">
+        <div class="min-w-0 flex-1 flex items-center scroll-x-hidden whitespace-nowrap rounded-xl border border-[rgb(var(--border))] bg-[rgb(var(--bg))] px-3 h-[2.4rem] font-mono text-[0.82rem]">{{ value }}</div>
+        <button class="btn-icon shrink-0" @click="regenerate">↻</button>
         <CopyButton :value="value" />
       </div>
 

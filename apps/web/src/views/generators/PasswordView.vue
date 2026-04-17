@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { generatePassword, analyzePassword, type PasswordOptions } from '@germondai/security';
+import { generatePassword, type PasswordOptions } from '@germondai/security';
 import CopyButton from '@/components/shared/CopyButton.vue';
 import CliCommandBox from '@/components/shared/CliCommandBox.vue';
 
@@ -43,15 +43,6 @@ const outputs = computed<string[]>(() => {
   catch { return []; }
 });
 
-const strength = computed(() => {
-  const p = outputs.value[0];
-  return p ? analyzePassword(p) : null;
-});
-
-function scoreColor(score: number): string {
-  return ['rgb(var(--danger))', 'rgb(var(--danger))', 'rgb(var(--accent-2))', 'rgb(var(--accent))', 'rgb(var(--ok))'][score] ?? '';
-}
-
 function regenerate() { seed.value++; }
 
 const cli = computed(() => {
@@ -78,52 +69,17 @@ const cli = computed(() => {
       <div>
         <label class="field-label">Presets</label>
         <div class="tab-bar">
-          <button type="button" @click="applyPreset('memorable')" :class="{ 'is-active': activePreset === 'memorable' }" aria-pressed="false">Memorable</button>
-          <button type="button" @click="applyPreset('standard')" :class="{ 'is-active': activePreset === 'standard' }" aria-pressed="false">Standard</button>
-          <button type="button" @click="applyPreset('maximum')" :class="{ 'is-active': activePreset === 'maximum' }" aria-pressed="false">Maximum</button>
+          <button type="button" @click="applyPreset('memorable')" :class="{ 'is-active': activePreset === 'memorable' }">Memorable</button>
+          <button type="button" @click="applyPreset('standard')"  :class="{ 'is-active': activePreset === 'standard' }">Standard</button>
+          <button type="button" @click="applyPreset('maximum')"   :class="{ 'is-active': activePreset === 'maximum' }">Maximum</button>
         </div>
       </div>
 
       <div class="space-y-2">
-        <div v-for="(pwd, idx) in outputs" :key="idx" class="flex items-stretch gap-2">
-          <div class="flex-1 overflow-x-auto whitespace-nowrap rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--bg))] px-3 py-2.5 font-mono text-[0.95rem]">{{ pwd || '—' }}</div>
-          <button class="btn-icon" @click="regenerate" aria-label="Regenerate">↻</button>
+        <div v-for="(pwd, idx) in outputs" :key="idx" class="flex items-stretch gap-2 min-w-0">
+          <div class="min-w-0 flex-1 flex items-center scroll-x-hidden whitespace-nowrap rounded-xl border border-[rgb(var(--border))] bg-[rgb(var(--bg))] px-3 h-[2.4rem] font-mono text-[0.95rem]">{{ pwd || '—' }}</div>
+          <button class="btn-icon shrink-0" @click="regenerate" aria-label="Regenerate">↻</button>
           <CopyButton :value="pwd" />
-        </div>
-      </div>
-
-      <div v-if="strength && count === 1" class="rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--bg))] p-4 space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-[0.78rem] uppercase tracking-wider text-[rgb(var(--fg-muted))]">Strength</span>
-          <span class="font-bold text-[0.95rem]" :style="{ color: scoreColor(strength.score) }">
-            {{ strength.label }} · score {{ strength.score }}/4
-          </span>
-        </div>
-        <div class="flex gap-1.5">
-          <div v-for="i in 5" :key="i" class="h-2.5 flex-1 rounded-full border"
-            :style="{ background: i <= strength.score + 1 ? scoreColor(strength.score) : 'transparent', borderColor: i <= strength.score + 1 ? scoreColor(strength.score) : 'rgb(var(--border))' }" />
-        </div>
-        <div class="grid grid-cols-2 gap-x-4 gap-y-3 text-[0.85rem] pt-1 sm:grid-cols-4">
-          <div>
-            <div class="text-[0.65rem] uppercase tracking-wider text-[rgb(var(--fg-muted))]">Length</div>
-            <div class="font-bold text-[1.05rem] tabular-nums">{{ strength.length }}</div>
-            <div class="text-[0.7rem] text-[rgb(var(--fg-muted))]">characters</div>
-          </div>
-          <div>
-            <div class="text-[0.65rem] uppercase tracking-wider text-[rgb(var(--fg-muted))]">Entropy</div>
-            <div class="font-bold text-[1.05rem] tabular-nums">{{ strength.effectiveBits.toFixed(1) }}</div>
-            <div class="text-[0.7rem] text-[rgb(var(--fg-muted))]">bits</div>
-          </div>
-          <div>
-            <div class="text-[0.65rem] uppercase tracking-wider text-[rgb(var(--fg-muted))]">Pool</div>
-            <div class="font-bold text-[1.05rem] tabular-nums">{{ strength.poolSize }}</div>
-            <div class="text-[0.7rem] text-[rgb(var(--fg-muted))]">chars</div>
-          </div>
-          <div>
-            <div class="text-[0.65rem] uppercase tracking-wider text-[rgb(var(--fg-muted))]">Crackable (avg)</div>
-            <div class="font-bold text-[1.05rem] tabular-nums">{{ strength.crackTimes.find(c => c.scenario === 'offline (bcrypt/scrypt)')?.averageHuman ?? '—' }}</div>
-            <div class="text-[0.7rem] text-[rgb(var(--fg-muted))]">bcrypt-class attack</div>
-          </div>
         </div>
       </div>
 
