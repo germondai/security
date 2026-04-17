@@ -73,7 +73,7 @@ const cliCommand = computed(() => {
       <div v-if="mode === 'encrypt'">
         <label class="field-label">Plaintext</label>
         <textarea v-model="plain" rows="6" class="font-mono" />
-        <button class="btn btn-accent mt-3" @click="doEncrypt">Encrypt →</button>
+        <button class="btn btn-accent mt-3 w-full" @click="doEncrypt">Encrypt →</button>
       </div>
 
       <div v-else class="space-y-3">
@@ -89,7 +89,7 @@ const cliCommand = computed(() => {
           <label class="field-label">Ciphertext (base64)</label>
           <textarea v-model="cipher" rows="4" class="font-mono" />
         </div>
-        <button class="btn btn-accent" @click="doDecrypt">Decrypt →</button>
+        <button class="btn btn-accent w-full" @click="doDecrypt">Decrypt →</button>
       </div>
 
       <p v-if="error" class="text-[0.85rem] text-[rgb(var(--danger))]" role="alert">{{ error }}</p>

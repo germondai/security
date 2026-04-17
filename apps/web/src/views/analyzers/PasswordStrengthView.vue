@@ -18,6 +18,14 @@ const scoreColor = (s: 0 | 1 | 2 | 3 | 4): string => {
 
 const cli = computed(() => `bun cli analyze --input "${input.value.replace(/"/g, '\\"').slice(0, 60) || '…'}"`);
 
+/** Split "online (rate-limit)" -> { main: "online", tag: "rate-limit" } so the
+ *  parenthetical can render as a smaller sub-line in the scenarios table. */
+function scenarioParts(s: string): { main: string; tag: string | null } {
+  const m = s.match(/^(.+?)\s*\(([^)]+)\)\s*$/);
+  if (!m) return { main: s, tag: null };
+  return { main: m[1] ?? s, tag: m[2] ?? null };
+}
+
 function tryExample() { input.value = EXAMPLE; }
 
 function generateStrong() {
@@ -38,7 +46,7 @@ function generateStrong() {
           Type or paste a candidate. Dictionary + patterns + entropy + crack time, all local.
         </p>
       </div>
-      <button class="btn btn-accent" @click="generateStrong">⚡ Generate strong password</button>
+      <button class="btn btn-accent w-full" @click="generateStrong">⚡ Generate strong password</button>
     </header>
 
     <div class="card p-5 space-y-4">
@@ -73,24 +81,36 @@ function generateStrong() {
 
         <div>
           <h3 class="field-label">Time to crack (per scenario)</h3>
-          <div class="overflow-hidden rounded-md border">
-            <table class="w-full text-[0.83rem]">
-              <thead class="bg-[rgb(var(--bg))] text-[0.7rem] uppercase tracking-wider text-[rgb(var(--fg-muted))]">
-                <tr><th class="px-3 py-2 text-left">Scenario</th><th class="px-3 py-2 text-right">Guesses/s</th><th class="px-3 py-2 text-right">Average</th><th class="px-3 py-2 text-right">Worst case</th></tr>
-              </thead>
-              <tbody>
-                <tr v-for="ct in result.crackTimes" :key="ct.scenario" class="border-t">
-                  <td class="px-3 py-1.5 font-mono text-[0.8rem]">{{ ct.scenario }}</td>
-                  <td class="px-3 py-1.5 text-right tabular-nums text-[rgb(var(--fg-muted))]">{{ ct.guessesPerSecond.toExponential(0) }}</td>
-                  <td class="px-3 py-1.5 text-right font-semibold">{{ ct.averageHuman }}</td>
-                  <td class="px-3 py-1.5 text-right text-[rgb(var(--fg-muted))]">{{ ct.worstHuman }}</td>
-                </tr>
-              </tbody>
-            </table>
-            <p class="text-[0.7rem] text-[rgb(var(--fg-muted))] px-3 py-2">
-              Values beyond 10¹⁵ seconds use scientific notation; "forever" means longer than the heat death of the universe.
-            </p>
+          <div class="space-y-2">
+            <div v-for="ct in result.crackTimes" :key="ct.scenario"
+              class="rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--bg))] p-3">
+              <div class="flex items-start justify-between gap-3">
+                <div class="font-mono text-[0.85rem] min-w-0">
+                  <template v-if="scenarioParts(ct.scenario).tag">
+                    <div class="font-semibold">{{ scenarioParts(ct.scenario).main }}</div>
+                    <div class="text-[0.72rem] text-[rgb(var(--fg-faint))]">{{ scenarioParts(ct.scenario).tag }}</div>
+                  </template>
+                  <template v-else>{{ ct.scenario }}</template>
+                </div>
+                <div class="shrink-0 text-right text-[0.78rem] tabular-nums text-[rgb(var(--fg-muted))]">
+                  <div>{{ ct.guessesPerSecond.toExponential(0) }}<span class="text-[0.65rem]"> /s</span></div>
+                </div>
+              </div>
+              <div class="mt-2 grid grid-cols-2 gap-3 text-[0.85rem]">
+                <div>
+                  <div class="text-[0.62rem] uppercase tracking-wider text-[rgb(var(--fg-faint))]">Average</div>
+                  <div class="font-semibold tabular-nums">{{ ct.averageHuman }}</div>
+                </div>
+                <div>
+                  <div class="text-[0.62rem] uppercase tracking-wider text-[rgb(var(--fg-faint))]">Worst case</div>
+                  <div class="tabular-nums text-[rgb(var(--fg-muted))]">{{ ct.worstHuman }}</div>
+                </div>
+              </div>
+            </div>
           </div>
+          <p class="text-[0.7rem] text-[rgb(var(--fg-muted))] leading-relaxed">
+            Values beyond 10¹⁵ seconds use scientific notation; "forever" means longer than the heat death of the universe.
+          </p>
         </div>
 
         <div v-if="result.patterns.length > 0">

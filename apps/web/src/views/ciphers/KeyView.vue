@@ -84,7 +84,7 @@ const cliCommand = () => {
         </div>
       </div>
 
-      <button class="btn btn-accent" :disabled="loading" @click="regenerate">
+      <button class="btn btn-accent w-full" :disabled="loading" @click="regenerate">
         {{ loading ? 'Generating…' : '↻ Generate' }}
       </button>
 

@@ -60,7 +60,7 @@ const cliCommand = computed(() => {
           <label class="field-label">Payload (JSON object)</label>
           <textarea v-model="payloadText" rows="6" class="font-mono" />
         </div>
-        <button class="btn btn-accent" @click="doSign">Sign →</button>
+        <button class="btn btn-accent w-full" @click="doSign">Sign →</button>
       </div>
 
       <div v-else>
@@ -68,7 +68,7 @@ const cliCommand = computed(() => {
           <label class="field-label">Token</label>
           <textarea v-model="token" rows="4" class="font-mono break-all" placeholder="paste a JWT…" />
         </div>
-        <button class="btn btn-accent" @click="doVerify">Verify →</button>
+        <button class="btn btn-accent w-full" @click="doVerify">Verify →</button>
       </div>
 
       <p v-if="error" class="text-[0.85rem] text-[rgb(var(--danger))]" role="alert">{{ error }}</p>
