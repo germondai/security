@@ -627,6 +627,16 @@ export function detectPatterns(s: string): DetectedPattern[] {
   const out: DetectedPattern[] = [];
   if (s.length === 0) return out;
   const lc = s.toLowerCase();
+  // Dedup by (type, start, lowercase match). Same word found by both the
+  // substring loop and the word-chunk loop (e.g. "password" in "password123")
+  // should only be reported once.
+  const seen = new Set<string>();
+  const add = (p: DetectedPattern): void => {
+    const key = `${p.type}|${p.start}|${p.match.toLowerCase()}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push(p);
+  };
 
   // Common-word match — only consider words 6+ chars. Shorter substrings like
   // "me", "or", "um" match almost every random string and would cause
@@ -635,9 +645,9 @@ export function detectPatterns(s: string): DetectedPattern[] {
   for (const w of COMMON) {
     if (w.length < 6) continue;
     const idx = lc.indexOf(w);
-    if (idx >= 0) out.push({ type: 'common', match: s.slice(idx, idx + w.length), start: idx });
+    if (idx >= 0) add({ type: 'common', match: s.slice(idx, idx + w.length), start: idx });
     const ridx = lc.indexOf(reversed(w));
-    if (ridx >= 0 && ridx !== idx) out.push({ type: 'common', match: s.slice(ridx, ridx + w.length), start: ridx });
+    if (ridx >= 0 && ridx !== idx) add({ type: 'common', match: s.slice(ridx, ridx + w.length), start: ridx });
   }
 
   // Word-boundary match — catches camelCase / PascalCase / kebab / snake / dot
@@ -651,7 +661,7 @@ export function detectPatterns(s: string): DetectedPattern[] {
     const lw = w.toLowerCase();
     if (lw.length < 3 || !COMMON.has(lw)) continue;
     const idx = lc.indexOf(lw);
-    if (idx >= 0) out.push({ type: 'common', match: s.slice(idx, idx + lw.length), start: idx });
+    if (idx >= 0) add({ type: 'common', match: s.slice(idx, idx + lw.length), start: idx });
   }
 
   for (const seq of SEQUENCES) {
@@ -660,9 +670,9 @@ export function detectPatterns(s: string): DetectedPattern[] {
         const fwd = seq.slice(i, i + len);
         const rev = reversed(fwd);
         const from = lc.indexOf(fwd);
-        if (from >= 0) { out.push({ type: 'sequence', match: s.slice(from, from + len), start: from }); break; }
+        if (from >= 0) { add({ type: 'sequence', match: s.slice(from, from + len), start: from }); break; }
         const rfrom = lc.indexOf(rev);
-        if (rfrom >= 0) { out.push({ type: 'sequence', match: s.slice(rfrom, rfrom + len), start: rfrom }); break; }
+        if (rfrom >= 0) { add({ type: 'sequence', match: s.slice(rfrom, rfrom + len), start: rfrom }); break; }
       }
     }
   }
@@ -670,12 +680,12 @@ export function detectPatterns(s: string): DetectedPattern[] {
   const reRepeat = /(.)\1{2,}/g;
   let m: RegExpExecArray | null;
   while ((m = reRepeat.exec(s)) !== null) {
-    out.push({ type: 'repeat', match: m[0], start: m.index });
+    add({ type: 'repeat', match: m[0], start: m.index });
   }
 
   const reDate = /\d{4,8}/g;
   while ((m = reDate.exec(s)) !== null) {
-    out.push({ type: 'date', match: m[0], start: m.index });
+    add({ type: 'date', match: m[0], start: m.index });
   }
 
   return out;
