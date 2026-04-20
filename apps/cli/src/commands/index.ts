@@ -1,18 +1,21 @@
-import { gen } from './gen.js';
+import { analyzeCmd } from "./analyze.js";
+import { dec } from "./dec.js";
+import { decodeCmd } from "./decode.js";
+import { enc } from "./enc.js";
+import { encodeCmd } from "./encode.js";
+import { gen } from "./gen.js";
 // slug intentionally removed — not a security primitive
-import { hash } from './hash.js';
-import { enc } from './enc.js';
-import { dec } from './dec.js';
-import { keyCmd } from './key.js';
-import { jwtCmd } from './jwt.js';
-import { encodeCmd } from './encode.js';
-import { decodeCmd } from './decode.js';
-import { analyzeCmd } from './analyze.js';
-import { signLeaf, verifyLeaf } from './sign.js';
+import { hash } from "./hash.js";
+import { jwtCmd } from "./jwt.js";
+import { keyCmd } from "./key.js";
+import { signLeaf, verifyLeaf } from "./sign.js";
 
 export function registerCommands() {
   return {
-    gen, hash, enc, dec,
+    gen,
+    hash,
+    enc,
+    dec,
     key: keyCmd,
     jwt: jwtCmd,
     encode: encodeCmd,
@@ -20,5 +23,5 @@ export function registerCommands() {
     analyze: analyzeCmd,
     sign: signLeaf,
     verify: verifyLeaf,
-  } as unknown as Record<string, import('citty').CommandDef>;
+  } as unknown as Record<string, import("citty").CommandDef>;
 }
