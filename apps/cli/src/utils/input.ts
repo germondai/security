@@ -8,18 +8,18 @@
  *   2. the file at `value` if it is a path that exists
  *   3. stdin if it is a pipe (not a TTY)
  */
-import { existsSync, readFileSync } from 'node:fs';
-import { stdin } from 'node:process';
+import { existsSync, readFileSync } from "node:fs";
+import { stdin } from "node:process";
 
 export function readInput(value?: string): string {
   if (value === undefined) {
     if (!stdin.isTTY) {
-      return readFileSync(0, 'utf8');
+      return readFileSync(0, "utf8");
     }
     throw new Error('No input provided. Pass --input "<value>" or pipe via stdin.');
   }
   if (existsSync(value)) {
-    return readFileSync(value, 'utf8');
+    return readFileSync(value, "utf8");
   }
   return value;
 }
