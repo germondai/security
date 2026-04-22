@@ -1,5 +1,5 @@
-import { computed, ref } from 'vue';
-import { generatePassword, type PasswordOptions } from '@germondai/security';
+import { generatePassword, type PasswordOptions } from "@germondai/security";
+import { computed, ref } from "vue";
 
 export function usePasswordGenerator() {
   const length = ref(20);
@@ -27,7 +27,7 @@ export function usePasswordGenerator() {
       return generatePassword(options.value);
     } catch (e) {
       error.value = e instanceof Error ? e.message : String(e);
-      return '';
+      return "";
     }
   });
 
