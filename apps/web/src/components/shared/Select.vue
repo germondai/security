@@ -5,7 +5,10 @@
  * the rest of the app. Trigger the native picker from a styled wrapper so we
  * get a consistent focus ring, radius, and hover state.
  */
-import { computed } from 'vue';
+// biome-ignore lint/style/useVueMultiWordComponentNames: intentional single-word UI primitive
+import { computed } from "vue";
+
+defineOptions({ name: "SelectField" });
 
 const props = defineProps<{
   modelValue: T;
@@ -13,23 +16,37 @@ const props = defineProps<{
   ariaLabel?: string;
 }>();
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: T): void;
-}>();
+const emit = defineEmits<(e: "update:modelValue", value: T) => void>();
 
-const currentLabel = computed(() => props.options.find((o) => o.value === props.modelValue)?.label ?? String(props.modelValue));
+const currentLabel = computed(
+  () => props.options.find((o) => o.value === props.modelValue)?.label ?? String(props.modelValue),
+);
 
 function onChange(e: Event) {
   const t = e.target as HTMLSelectElement;
-  emit('update:modelValue', t.value as T);
+  emit("update:modelValue", t.value as T);
 }
 </script>
 
 <template>
+  <!-- biome-ignore lint/a11y/noLabelWithoutControl: label wraps native select below -->
   <label class="ui-select">
     <span v-if="ariaLabel" class="sr-only">{{ ariaLabel }}</span>
     <span class="ui-select-value">{{ currentLabel }}</span>
-    <svg class="ui-select-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg>
+    <svg
+      class="ui-select-chev"
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M6 9l6 6 6-6" />
+    </svg>
     <select :value="modelValue" @change="onChange" class="ui-select-native">
       <option v-for="o in options" :key="String(o.value)" :value="o.value">{{ o.label }}</option>
     </select>
@@ -56,14 +73,29 @@ function onChange(e: Event) {
   line-height: 1;
   cursor: pointer;
   user-select: none;
-  transition: background 120ms, border-color 120ms, box-shadow 120ms;
+  transition:
+    background 120ms,
+    border-color 120ms,
+    box-shadow 120ms;
   white-space: nowrap;
   text-align: center;
 }
-.ui-select:hover { background: rgb(var(--bg-hover)); border-color: rgb(var(--fg-faint)); }
-.ui-select:focus-within { border-color: rgb(var(--accent)); box-shadow: 0 0 0 3px rgb(var(--accent) / 0.18); }
-.ui-select-value { line-height: 1; width: 100%; }
-.ui-select-chev { color: rgb(var(--fg-muted)); flex-shrink: 0; }
+.ui-select:hover {
+  background: rgb(var(--bg-hover));
+  border-color: rgb(var(--fg-faint));
+}
+.ui-select:focus-within {
+  border-color: rgb(var(--accent));
+  box-shadow: 0 0 0 3px rgb(var(--accent) / 0.18);
+}
+.ui-select-value {
+  line-height: 1;
+  width: 100%;
+}
+.ui-select-chev {
+  color: rgb(var(--fg-muted));
+  flex-shrink: 0;
+}
 /* Native select is invisible but covers the wrapper for native UI. */
 .ui-select-native {
   position: absolute;
@@ -76,7 +108,14 @@ function onChange(e: Event) {
   background: transparent;
 }
 .sr-only {
-  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 </style>

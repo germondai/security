@@ -5,14 +5,14 @@ const props = defineProps<{ command: string }>();
 const copied = ref(false);
 const has = computed(() => props.command && props.command.length > 0);
 async function copy() {
-	if (!has.value) return;
-	try {
-		await navigator.clipboard.writeText(props.command);
-		copied.value = true;
-		setTimeout(() => (copied.value = false), 1500);
-	} catch {
-		/* ignore */
-	}
+  if (!has.value) return;
+  try {
+    await navigator.clipboard.writeText(props.command);
+    copied.value = true;
+    setTimeout(() => (copied.value = false), 1500);
+  } catch {
+    /* ignore */
+  }
 }
 </script>
 
@@ -21,7 +21,8 @@ async function copy() {
     <code
       class="block min-h-[2.4rem] scroll-x-hidden whitespace-nowrap rounded-xl border border-[rgb(var(--border))] bg-[rgb(var(--bg))] pl-3 pr-12 py-2 font-mono text-[0.78rem] text-[rgb(var(--fg-muted))] leading-[1.4]"
       :title="command"
-    >$ {{ command }}</code>
+      >$ {{ command }}</code
+    >
     <button
       type="button"
       @click="copy"
@@ -29,11 +30,35 @@ async function copy() {
       :title="copied ? 'Copied' : 'Copy CLI command'"
       :aria-label="copied ? 'Copied' : 'Copy CLI command'"
     >
-      <svg v-if="!copied" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        v-if="!copied"
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
         <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
         <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
       </svg>
-      <svg v-else xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        v-else
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
         <polyline points="20 6 9 17 4 12"></polyline>
       </svg>
     </button>
