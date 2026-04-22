@@ -1,5 +1,7 @@
 <script setup lang="ts">
-defineProps<{ variant?: 'outline' | 'ghost' | 'default'; size?: 'icon' | 'sm' | 'md' }>();
+// biome-ignore lint/style/useVueMultiWordComponentNames: intentional single-word UI primitive
+defineOptions({ name: "AppButton" });
+defineProps<{ variant?: "outline" | "ghost" | "default"; size?: "icon" | "sm" | "md" }>();
 </script>
 
 <template>
