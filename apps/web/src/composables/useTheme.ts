@@ -1,32 +1,29 @@
-import { ref, readonly, watchEffect } from 'vue';
+import { readonly, ref, watchEffect } from "vue";
 
-export type Theme = 'light' | 'dark' | 'system';
+export type Theme = "light" | "dark";
 
-const STORAGE_KEY = 'gsec-theme';
-const theme = ref<Theme>('system');
-const resolved = ref<'light' | 'dark'>('light');
+const STORAGE_KEY = "gsec-theme";
+
+function systemPreference(): Theme {
+  if (typeof window === "undefined") return "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+const theme = ref<Theme>(systemPreference());
 let initialized = false;
 
 function applyTheme(t: Theme): void {
-  if (typeof document === 'undefined') return;
-  const html = document.documentElement;
-  if (t === 'system') {
-    html.removeAttribute('data-theme');
-    const mql = window.matchMedia('(prefers-color-scheme: dark)');
-    resolved.value = mql.matches ? 'dark' : 'light';
-  } else {
-    html.setAttribute('data-theme', t);
-    resolved.value = t;
-  }
+  if (typeof document === "undefined") return;
+  document.documentElement.setAttribute("data-theme", t);
 }
 
-function readStored(): Theme {
-  if (typeof window === 'undefined') return 'system';
+function readStored(): Theme | null {
+  if (typeof window === "undefined") return null;
   try {
     const v = localStorage.getItem(STORAGE_KEY);
-    return v === 'light' || v === 'dark' || v === 'system' ? v : 'system';
+    return v === "light" || v === "dark" ? v : null;
   } catch {
-    return 'system';
+    return null;
   }
 }
 
@@ -34,13 +31,12 @@ function readStored(): Theme {
 export function initTheme(): void {
   if (initialized) return;
   initialized = true;
-  theme.value = readStored();
+  theme.value = readStored() ?? systemPreference();
   applyTheme(theme.value);
   watchEffect(() => applyTheme(theme.value));
-  if (typeof window !== 'undefined') {
-    const mql = window.matchMedia('(prefers-color-scheme: dark)');
-    mql.addEventListener('change', () => {
-      if (theme.value === 'system') applyTheme('system');
+  if (typeof window !== "undefined") {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+      if (readStored() === null) theme.value = e.matches ? "dark" : "light";
     });
   }
 }
@@ -48,13 +44,14 @@ export function initTheme(): void {
 export function useTheme() {
   function set(next: Theme) {
     theme.value = next;
-    try { if (typeof localStorage !== 'undefined') localStorage.setItem(STORAGE_KEY, next); } catch { /* ignore */ }
+    try {
+      if (typeof localStorage !== "undefined") localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      /* ignore */
+    }
   }
-  function cycle() {
-    const order: Theme[] = ['system', 'light', 'dark'];
-    const idx = order.indexOf(theme.value);
-    const next = order[(idx + 1) % order.length] as Theme;
-    set(next);
+  function toggle() {
+    set(theme.value === "dark" ? "light" : "dark");
   }
-  return { theme: readonly(theme), resolved: readonly(resolved), set, cycle };
+  return { theme: readonly(theme), set, toggle };
 }

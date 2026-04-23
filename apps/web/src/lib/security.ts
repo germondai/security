@@ -1,1 +1,1 @@
-export * as security from '@germondai/security';
+export * as security from "@germondai/security";
