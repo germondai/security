@@ -18,7 +18,10 @@ const CLASS_POOLS = { lower: 26, upper: 26, digits: 10, symbols: 32 } as const;
 
 export function detectPoolSize(s: string): number {
   let pool = 0;
-  let hasLower = false, hasUpper = false, hasDigit = false, hasSymbol = false;
+  let hasLower = false,
+    hasUpper = false,
+    hasDigit = false,
+    hasSymbol = false;
   for (let i = 0; i < s.length; i++) {
     const c = s.charCodeAt(i);
     if (c >= 0x61 && c <= 0x7a) hasLower = true;
@@ -27,9 +30,9 @@ export function detectPoolSize(s: string): number {
     else if (c < 0x20 || c > 0x7e) hasSymbol = true;
     else hasSymbol = true;
   }
-  if (hasLower)  pool += CLASS_POOLS.lower;
-  if (hasUpper)  pool += CLASS_POOLS.upper;
-  if (hasDigit)  pool += CLASS_POOLS.digits;
+  if (hasLower) pool += CLASS_POOLS.lower;
+  if (hasUpper) pool += CLASS_POOLS.upper;
+  if (hasDigit) pool += CLASS_POOLS.digits;
   if (hasSymbol) pool += CLASS_POOLS.symbols;
   return pool;
 }
