@@ -7,10 +7,10 @@
       "packages/**/*.{ts,js}",
       "biome.json",
       "*.json",
-      "!apps/**/dist/**",
-      "!apps/**/.vite/**",
-      "!packages/**/dist/**",
-      "!**/node_modules/**"
+      "!apps/**/dist",
+      "!apps/**/.vite",
+      "!packages/**/dist",
+      "!**/node_modules"
     ]
   },
   "formatter": {
@@ -32,10 +32,10 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "suspicious": {
         "noExplicitAny": "warn",
-        "noConsoleLog": "warn"
+        "noConsole": { "level": "warn", "options": { "allow": ["log"] } }
       },
       "style": {
         "useImportType": "warn",
@@ -54,9 +54,25 @@
     "formatter": { "enabled": true }
   },
   "html": {
+    "experimentalFullSupportEnabled": true,
     "formatter": { "enabled": true }
   },
-  "vue": {
-    "formatter": { "enabled": true }
-  }
+  "overrides": [
+    {
+      "includes": ["**/*.svelte", "**/*.astro", "**/*.vue"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useConst": "off",
+            "useImportType": "off",
+            "noNonNullAssertion": "off"
+          },
+          "correctness": {
+            "noUnusedVariables": "off",
+            "noUnusedImports": "off"
+          }
+        }
+      }
+    }
+  ]
 }
