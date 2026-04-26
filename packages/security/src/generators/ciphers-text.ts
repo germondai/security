@@ -1,7 +1,7 @@
 export function caesar(text: string, shift: number): string {
   const n = ((shift % 26) + 26) % 26;
   return text.replace(/[a-zA-Z]/g, (ch) => {
-    const base = ch <= 'Z' ? 65 : 97;
+    const base = ch <= "Z" ? 65 : 97;
     return String.fromCharCode(((ch.charCodeAt(0) - base + n) % 26) + base);
   });
 }
