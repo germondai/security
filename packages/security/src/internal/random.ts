@@ -1,4 +1,4 @@
-import { randomBytes } from 'node:crypto';
+import { randomBytes } from "node:crypto";
 
 /**
  * Internal: a uniform random integer in [0, maxExclusive) using a fixed-width
@@ -42,13 +42,17 @@ function uuidV4Bytes(): Uint8Array {
 
 function uuidV4String(bytes: Uint8Array): string {
   const h: string[] = [];
-  for (let i = 0; i < bytes.length; i++) h.push((bytes[i] ?? 0).toString(16).padStart(2, '0'));
+  for (let i = 0; i < bytes.length; i++) h.push((bytes[i] ?? 0).toString(16).padStart(2, "0"));
   return (
-    h.slice(0, 4).join('') + '-' +
-    h.slice(4, 6).join('') + '-' +
-    h.slice(6, 8).join('') + '-' +
-    h.slice(8, 10).join('') + '-' +
-    h.slice(10, 16).join('')
+    h.slice(0, 4).join("") +
+    "-" +
+    h.slice(4, 6).join("") +
+    "-" +
+    h.slice(6, 8).join("") +
+    "-" +
+    h.slice(8, 10).join("") +
+    "-" +
+    h.slice(10, 16).join("")
   );
 }
 
@@ -61,16 +65,16 @@ export function secureRandomBytes(length: number): Uint8Array {
 
 export function secureRandomInt(minInclusive: number, maxExclusive: number): number {
   if (!Number.isInteger(minInclusive) || !Number.isInteger(maxExclusive)) {
-    throw new RangeError('bounds must be integers');
+    throw new RangeError("bounds must be integers");
   }
   if (maxExclusive <= minInclusive) {
-    throw new RangeError('maxExclusive must be > minInclusive');
+    throw new RangeError("maxExclusive must be > minInclusive");
   }
   return minInclusive + uniformInt(maxExclusive - minInclusive);
 }
 
 export function secureRandomPick<T>(pool: readonly T[]): T {
-  if (pool.length === 0) throw new RangeError('cannot pick from an empty pool');
+  if (pool.length === 0) throw new RangeError("cannot pick from an empty pool");
   const idx = uniformInt(pool.length);
   return pool[idx] as T;
 }
