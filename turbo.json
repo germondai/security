@@ -2,11 +2,11 @@
   "$schema": "https://turbo.build/schema.json",
   "globalEnv": ["NODE_ENV"],
   "tasks": {
-    "build":     { "dependsOn": ["^build"], "outputs": ["dist/**", ".vite/**"] },
-    "dev":       { "cache": false, "persistent": true },
-    "lint":      { "outputs": [] },
+    "build": { "dependsOn": ["^build"], "outputs": ["dist/**", ".vite/**"] },
+    "dev": { "cache": false, "persistent": true },
+    "lint": { "outputs": [] },
     "typecheck": { "dependsOn": ["^build"], "outputs": [] },
-    "test":      { "dependsOn": ["^build"], "outputs": ["coverage/**"] },
-    "clean":     { "cache": false }
+    "test": { "dependsOn": ["^build"], "outputs": ["coverage/**"] },
+    "clean": { "cache": false }
   }
 }
