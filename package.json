@@ -35,7 +35,7 @@
     "core:test": "bun run --filter @germondai/security test"
   },
   "devDependencies": {
-    "turbo": "^2.0.0",
-    "typescript": "^5.5.0"
+    "turbo": "^2.4.0",
+    "typescript": "^5.8.0"
   }
 }

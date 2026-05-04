@@ -7,10 +7,8 @@ export default defineConfig({
   plugins: [
     vue(),
     nodePolyfills({
-      // crypto-browserify's Hash extends a stream.Transform; without `stream`
-      // the constructor throws "Cannot read properties of undefined
-      // (reading 'call')" when .update() is called. The util promisify
-      // shim is broken in newer Vite versions, so we still exclude `util`.
+      // stream required: crypto-browserify's Hash extends stream.Transform
+      // util excluded: promisify shim is broken in newer Vite versions
       include: ["crypto", "buffer", "stream"],
       exclude: ["util"],
       globals: { Buffer: true, global: true, process: true },
