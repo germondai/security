@@ -28,7 +28,7 @@ function onInput(e: Event) {
   <div class="grid gap-2">
     <div class="flex items-center justify-between">
       <span class="text-sm font-medium leading-none">{{ label }}</span>
-      <span class="text-sm tabular-nums text-muted-foreground">{{ modelValue }}</span>
+      <span class="text-sm tabular-nums text-[rgb(var(--fg-muted))]">{{ modelValue }}</span>
     </div>
     <input
       type="range"
@@ -38,7 +38,7 @@ function onInput(e: Event) {
       :value="modelValue"
       :aria-label="label"
       @input="onInput"
-      class="h-2 w-full cursor-pointer appearance-none rounded-full bg-muted accent-foreground"
+      class="h-2 w-full cursor-pointer appearance-none rounded-full bg-[rgb(var(--border))]"
     >
   </div>
 </template>
