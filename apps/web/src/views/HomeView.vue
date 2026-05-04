@@ -128,10 +128,10 @@ const cliExamples = [
         <p
           class="mx-auto max-w-2xl text-[1.02rem] leading-relaxed text-[rgb(var(--fg-muted))] sm:mx-0"
         >
-          <strong class="text-[rgb(var(--fg))]">gsec</strong>
+          <strong class="text-[rgb(var(--fg))]">Germond's Security</strong>
           is a single-purpose toolkit for the things you reach for in a hurry: a strong password, a
           passphrase, a JWT, a quick check whether that candidate password would survive a real
-          attack. One pure-TypeScript core, shared by the <code>gsec</code> CLI and this web app.
+          attack. One pure-TypeScript core, shared by the CLI and this web app.
         </p>
 
         <div class="flex flex-wrap items-center justify-center gap-3 pt-2 sm:justify-start">
@@ -206,7 +206,7 @@ const cliExamples = [
           <span class="h-2.5 w-2.5 rounded-full bg-[rgb(var(--danger))]"></span>
           <span class="h-2.5 w-2.5 rounded-full bg-[rgb(var(--warn))]"></span>
           <span class="h-2.5 w-2.5 rounded-full bg-[rgb(var(--ok))]"></span>
-          <span class="ml-2 font-mono">~/projects/gsec — zsh</span>
+          <span class="ml-2 font-mono">~/projects/security — zsh</span>
           <span class="ml-auto font-mono">bun &gt;= 1.1</span>
         </div>
         <pre
