@@ -1,10 +1,5 @@
 <script setup lang="ts" generic="T extends string | number">
-/**
- * Custom-styled <select> replacement built on the native <select> element so
- * keyboard / accessibility / form behaviour stays identical, but it looks like
- * the rest of the app. Trigger the native picker from a styled wrapper so we
- * get a consistent focus ring, radius, and hover state.
- */
+// Native <select> inside a styled wrapper — full keyboard/a11y with custom appearance.
 // biome-ignore lint/style/useVueMultiWordComponentNames: intentional single-word UI primitive
 import { computed } from "vue";
 

@@ -3,9 +3,7 @@ import { RouterLink } from "vue-router";
 import ThemeToggle from "@/components/shared/ThemeToggle.vue";
 
 const emit = defineEmits<(e: "navigate") => void>();
-function onNavigate() {
-  emit("navigate");
-}
+const onNavigate = () => emit("navigate");
 
 interface Item {
   to: string;
@@ -31,10 +29,7 @@ const groups: Group[] = [
     label: "Analyzers",
     items: [{ to: "/analyzers/password-strength", label: "Password strength" }],
   },
-  {
-    label: "Hashes",
-    items: [{ to: "/hashes", label: "SHA-1/256/384/512" }],
-  },
+  { label: "Hashes", items: [{ to: "/hashes", label: "SHA-1/256/384/512" }] },
   {
     label: "Ciphers",
     items: [
@@ -43,10 +38,7 @@ const groups: Group[] = [
       { to: "/ciphers/key", label: "Key pairs" },
     ],
   },
-  {
-    label: "Encoders",
-    items: [{ to: "/encoders", label: "Universal converter" }],
-  },
+  { label: "Encoders", items: [{ to: "/encoders", label: "Universal converter" }] },
 ];
 </script>
 
@@ -54,14 +46,11 @@ const groups: Group[] = [
   <aside
     class="flex h-full w-72 flex-col gap-5 border-r border-[rgb(var(--border))] bg-[rgb(var(--bg-soft))] p-4"
   >
-    <!-- Brand row: the link to home wraps ONLY the brand mark+title; the
-         theme toggle sits next to it as a sibling so its click doesn't
-         navigate. -->
     <div class="flex items-center justify-between gap-2 rounded-lg px-2 py-1.5">
       <RouterLink
         to="/"
         @click="onNavigate"
-        class="flex flex-1 items-center gap-2.5 rounded-md px-1 py-0.5 hover:bg-[rgb(var(--bg))]"
+        class="flex flex-1 items-center gap-2.5 rounded-md px-1 py-0.5"
       >
         <svg
           width="22"
