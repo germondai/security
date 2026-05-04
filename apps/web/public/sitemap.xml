@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://security.germondai.com/</loc><priority>1.0</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://security.germondai.com/generators/password</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://security.germondai.com/generators/passphrase</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://security.germondai.com/generators/secret</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://security.germondai.com/generators/id</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://security.germondai.com/analyzers/password-strength</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://security.germondai.com/hashes</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://security.germondai.com/ciphers/aes</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://security.germondai.com/ciphers/jwt</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://security.germondai.com/ciphers/key</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://security.germondai.com/encoders</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+</urlset>

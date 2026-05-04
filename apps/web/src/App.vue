@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useRoute } from "vue-router";
 import AppSidebar from "@/components/layout/AppSidebar.vue";
 import ThemeToggle from "@/components/shared/ThemeToggle.vue";
 
 const sidebarOpen = ref(false);
-function toggleSidebar() {
+const toggleSidebar = () => {
   sidebarOpen.value = !sidebarOpen.value;
-}
-function closeSidebar() {
+};
+const closeSidebar = () => {
   sidebarOpen.value = false;
-}
+};
 
-const route = computed(() => location.pathname);
-const isHome = computed(() => route.value === "/" || route.value === "");
+const route = useRoute();
+const isHome = computed(() => route.path === "/");
 </script>
 
 <template>
   <div class="flex h-screen w-screen text-[rgb(var(--fg))]">
-    <!-- Backdrop overlay for mobile -->
     <button
       v-if="sidebarOpen"
       type="button"
@@ -38,9 +38,7 @@ const isHome = computed(() => route.value === "/" || route.value === "");
     />
 
     <main class="flex-1 overflow-y-auto min-w-0">
-      <!-- Mobile top bar: hamburger OR close button, plus brand title.
-           z-50 keeps the hamburger/close button ABOVE the sidebar (z-40)
-           and backdrop (z-30) so the user can always dismiss the menu. -->
+      <!-- Mobile top bar — z-50 keeps buttons above sidebar (z-40) and backdrop (z-30) -->
       <header
         class="sticky top-0 z-50 border-b border-[rgb(var(--border))] bg-[rgb(var(--bg))]/90 backdrop-blur md:hidden"
       >
@@ -52,7 +50,6 @@ const isHome = computed(() => route.value === "/" || route.value === "");
             :title="sidebarOpen ? 'Close navigation' : 'Open navigation'"
             @click="toggleSidebar"
           >
-            <!-- Hamburger when closed, X when open -->
             <svg
               v-if="!sidebarOpen"
               width="16"
@@ -83,63 +80,39 @@ const isHome = computed(() => route.value === "/" || route.value === "");
             </svg>
           </button>
 
-          <!-- Brand title — pretty version on home, plain text elsewhere -->
           <div class="min-w-0 flex-1">
-            <template v-if="isHome">
-              <div class="flex items-center gap-2">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="shrink-0 text-[rgb(var(--accent))]"
-                  aria-hidden="true"
+            <div class="flex items-center gap-2">
+              <svg
+                :width="isHome ? 18 : 16"
+                :height="isHome ? 18 : 16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="shrink-0 text-[rgb(var(--accent))]"
+                aria-hidden="true"
+              >
+                <path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6z"></path>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+              <div class="min-w-0 leading-tight">
+                <div
+                  :class="isHome ? 'truncate text-[1rem] font-bold tracking-tight' : 'truncate font-semibold tracking-tight'"
                 >
-                  <path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6z"></path>
-                  <path d="m9 12 2 2 4-4"></path>
-                </svg>
-                <div class="min-w-0 leading-tight">
-                  <div class="truncate text-[1rem] font-bold tracking-tight">
-                    Germond's Security
-                  </div>
-                  <div class="truncate text-[0.7rem] text-[rgb(var(--fg-muted))]">
-                    cryptography toolkit
-                  </div>
+                  Germond's Security
+                </div>
+                <div
+                  class="truncate text-[rgb(var(--fg-muted))]"
+                  :class="isHome ? 'text-[0.7rem]' : 'text-[0.65rem]'"
+                >
+                  {{ isHome ? 'cryptography toolkit' : 'Security & cryptography toolkit' }}
                 </div>
               </div>
-            </template>
-            <template v-else>
-              <div class="flex items-center gap-2">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="shrink-0 text-[rgb(var(--accent))]"
-                  aria-hidden="true"
-                >
-                  <path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6z"></path>
-                  <path d="m9 12 2 2 4-4"></path>
-                </svg>
-                <div class="min-w-0 leading-tight">
-                  <div class="truncate font-semibold tracking-tight">Germond's Security</div>
-                  <div class="truncate text-[0.65rem] text-[rgb(var(--fg-muted))]">
-                    Security & cryptography toolkit
-                  </div>
-                </div>
-              </div>
-            </template>
+            </div>
           </div>
 
-          <!-- Theme toggle (always accessible — mirrors desktop sidebar) -->
           <ThemeToggle />
         </div>
       </header>
