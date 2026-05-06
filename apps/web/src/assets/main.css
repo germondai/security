@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* ---------- Theme variables ----------
    Bitwarden-inspired: calm neutral backgrounds + blue primary + green/red

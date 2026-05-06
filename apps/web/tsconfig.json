@@ -1,6 +1,10 @@
 {
   "extends": "@germondai/tsconfig/vue.json",
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowArbitraryExtensions": true,
     "baseUrl": ".",
     "paths": { "@/*": ["./src/*"] }
   },
