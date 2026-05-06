@@ -17,7 +17,6 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules .turbo",
-
     "cli": "bun run cli:build && node apps/cli/bin/gsec.mjs",
     "cli:build": "turbo run build --filter=@germondai/security --filter=@germondai/security-cli",
     "cli:gen": "bun run cli -- gen",
@@ -25,17 +24,15 @@
     "cli:enc": "bun run cli -- enc",
     "cli:dec": "bun run cli -- dec",
     "cli:wizard": "bun run cli -- wizard",
-
     "web": "bun run web:dev",
     "web:dev": "cd apps/web && bun run dev",
     "web:build": "turbo run build --filter=@germondai/security-web",
     "web:preview": "cd apps/web && bun run preview",
-
     "core": "turbo run build --filter=@germondai/security",
     "core:test": "bun run --filter @germondai/security test"
   },
   "devDependencies": {
-    "turbo": "^2.4.0",
-    "typescript": "^5.8.0"
+    "turbo": "^2.10.0",
+    "typescript": "^6.0.3"
   }
 }
