@@ -42,7 +42,7 @@ const hasWebCrypto =
   typeof globalThis !== "undefined" &&
   typeof (globalThis as { crypto?: { subtle?: SubtleCrypto } }).crypto?.subtle !== "undefined";
 
-function asBytes(s: string, enc: "utf8" | "base64" | "hex" | undefined): Uint8Array {
+function asBytes(s: string, enc: "utf8" | "base64" | "hex" | undefined): Uint8Array<ArrayBuffer> {
   if (enc === "base64") {
     const bin = atob(s);
     const out = new Uint8Array(bin.length);
@@ -64,7 +64,7 @@ function bytesToHex(b: ArrayBuffer | Uint8Array): string {
   return out;
 }
 
-function deriveKeyBytes(passphrase: string): Uint8Array {
+function deriveKeyBytes(passphrase: string): Uint8Array<ArrayBuffer> {
   // SHA-256(passphrase) → 32 bytes. Same in Node and browser.
   return createHash("sha256").update(passphrase, "utf8").digest();
 }
@@ -285,7 +285,7 @@ export async function ed25519GenerateKeyPairAsync(): Promise<{
     const kp = (await subtle.generateKey({ name: "Ed25519" }, true, [
       "sign",
       "verify",
-    ])) as CryptoKeyPair;
+    ])) as unknown as CryptoKeyPair;
     const [spki, pkcs8] = await Promise.all([
       subtle.exportKey("spki", kp.publicKey),
       subtle.exportKey("pkcs8", kp.privateKey),

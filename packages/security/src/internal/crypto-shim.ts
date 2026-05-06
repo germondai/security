@@ -12,7 +12,7 @@ const hasWebCrypto =
   typeof globalThis !== "undefined" &&
   typeof (globalThis as { crypto?: { subtle?: SubtleCrypto } }).crypto?.subtle !== "undefined";
 
-function toBytes(s: string): Uint8Array {
+function toBytes(s: string): Uint8Array<ArrayBuffer> {
   return new TextEncoder().encode(s);
 }
 
