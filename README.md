@@ -7,18 +7,7 @@
 
 <p align="center">
   <em>Open-source cryptography toolkit — generate, hash, encrypt, analyze. All local. Nothing ever leaves your machine.</em>
-</p>
-
-<p align="center">
-  <a href="https://github.com/germondai/security/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/germondai/security?style=flat-square&color=blue" /></a>
-  <a href="https://github.com/germondai/security/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/germondai/security/ci.yml?style=flat-square&label=ci" /></a>
-  <a href="https://github.com/germondai/security/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/germondai/security?style=flat-square" /></a>
-  <a href="https://github.com/germondai/security/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/germondai/security?style=flat-square" /></a>
-  <img alt="Vue 3" src="https://img.shields.io/badge/Vue-3.5-42b883?style=flat-square&logo=vue.js&logoColor=white" />
-  <img alt="Vite 8" src="https://img.shields.io/badge/Vite-8-646cff?style=flat-square&logo=vite&logoColor=white" />
-  <img alt="Bun" src="https://img.shields.io/badge/Bun-1.3-f9f1e1?style=flat-square&logo=bun&logoColor=black" />
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-6-3178c6?style=flat-square&logo=typescript&logoColor=white" />
-</p>
+</p><br/>
 
 ## **Welcome** to <a href="https://security.germondai.com" target="_blank">**Germond's Security**</a>! 👋
 
