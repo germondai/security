@@ -23,7 +23,6 @@ Thumbs.db
 **/*.test.ts
 **/*.spec.ts
 
-# This file itself + sibling scripts that shouldn't ship in the build context
+# This file itself + the Dockerfile shouldn't ship in the build context
 Dockerfile
 .dockerignore
-server.ts

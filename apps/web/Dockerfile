@@ -1,19 +1,18 @@
+# Build from the repo root:
+#
+#   docker build -t germondai/security-web -f apps/web/Dockerfile .
+
 # ---------- 1. builder ----------
 FROM oven/bun:1.3.14 AS builder
 
 WORKDIR /repo
 
-# All paths outside the immediate build context come from the named
-# "workspace" context. The "workspace" context is supplied on the CLI via
-# `--build-context workspace=…` (either `.` from the repo root or `..` from
-# inside `apps/web/`).
-#
-# We pull manifests + lockfile first so `bun install` is cached when only
+# Pull manifests + lockfile first so `bun install` is cached when only
 # source changes.
-COPY --from=workspace package.json bun.lock bunfig.toml turbo.json biome.json ./
-COPY --from=workspace packages/tsconfig/package.json ./packages/tsconfig/
-COPY --from=workspace packages/security/package.json ./packages/security/
-COPY --from=workspace apps/web/package.json ./apps/web/
+COPY package.json bun.lock bunfig.toml turbo.json biome.json ./
+COPY packages/tsconfig/package.json ./packages/tsconfig/
+COPY packages/security/package.json ./packages/security/
+COPY apps/web/package.json ./apps/web/
 
 # Install every workspace dep.
 # `--frozen-lockfile` is intentionally NOT used: on a fresh Linux install bun
@@ -24,13 +23,9 @@ RUN bun --bun install
 
 # Now copy the actual source. Doing it in this order means a source-only
 # change doesn't bust the install layer.
-#
-# Everything comes from the `workspace` named context (= repo root in both
-# invocation modes), so the Dockerfile works regardless of whether the
-# immediate build context is the repo root or `apps/web/`.
-COPY --from=workspace packages/tsconfig ./packages/tsconfig
-COPY --from=workspace packages/security ./packages/security
-COPY --from=workspace apps/web ./apps/web
+COPY packages/tsconfig ./packages/tsconfig
+COPY packages/security ./packages/security
+COPY apps/web ./apps/web
 
 # Build only the web workspace.
 #
@@ -54,7 +49,7 @@ USER bun
 
 # Copy the built SPA and the small Bun static-server script.
 COPY --from=builder --chown=bun:bun /repo/apps/web/dist ./dist
-COPY --from=workspace --chown=bun:bun apps/web/server.ts ./server.ts
+COPY --chown=bun:bun apps/web/server.ts ./server.ts
 
 # Sensible production defaults — override with `-e PORT=…` at runtime.
 ENV NODE_ENV=production
