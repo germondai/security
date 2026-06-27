@@ -1,0 +1,18 @@
+# CODEOWNERS — auto-assigned reviewers for this repository
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# Place this file at the repo root (canonical) or under `.github/`.
+# The last matching rule wins; the first match (from top) does NOT win.
+
+# Default owner for the entire repository.
+*                               @germondai
+
+# Core crypto modules get extra scrutiny — any change here should be reviewed
+# by the maintainer, even if a future collaborator is added as a global owner.
+/packages/security/src/ciphers/   @germondai
+/packages/security/src/hashes/    @germondai
+/packages/security/src/analyzers/ @germondai
+/packages/security/src/formats/   @germondai
+
+# CLI wiring changes touch the public command surface.
+/apps/cli/src/commands/          @germondai
