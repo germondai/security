@@ -1,0 +1,105 @@
+name: ✨ Feature Request
+description: Suggest a new tool, primitive, or improvement.
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      heading: Got an idea? 💡
+      value: |
+        Tell us what you'd like to see, **why** it matters, and how it fits the
+        existing toolkit. Small, focused suggestions get triaged fastest.
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where should this live?
+      description: Where in the project this change belongs.
+      options:
+        - Web app (`apps/web`)
+        - CLI (`apps/cli`)
+        - Core library (`@germondai/security`)
+        - Cross-cutting (more than one of the above)
+        - Documentation only
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: What kind of feature?
+      description: Helps us route the request.
+      options:
+        - New cryptographic primitive (hash / cipher / encoder)
+        - New generator (password / id / key)
+        - UX improvement in the web app
+        - New CLI command or subcommand
+        - Performance / size optimization
+        - Developer experience (tooling, build, CI)
+        - Documentation / examples
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What problem are you trying to solve? Who is affected?
+      placeholder: I want to generate HKDF-derived keys so I can…
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe the feature, including API shape (function signature, CLI flags, route).
+      placeholder: |
+        - Add `deriveHkdfSha256(secret, salt, info, length)` to `packages/security/src/hashes/`.
+        - Expose it in `apps/web` under a new `/hashes/hkdf` route.
+        - Expose it in `apps/cli` as `bunx gsec hash hkdf …`.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What else did you consider? Why is this approach better?
+    validations:
+      required: false
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Estimated scope
+      description: A rough sense of the change size.
+      options:
+        - Trivial (one file, < 50 LOC)
+        - Small (a few files, < 200 LOC)
+        - Medium (new module / route / command)
+        - Large (architectural change)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: willingness
+    attributes:
+      label: Willingness to contribute
+      description: Helps us decide whether to wait or pick it up ourselves.
+      options:
+        - I'd like to submit a PR
+        - I'd help review / test a PR
+        - Just an idea — please pick it up
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context
+      description: Links, screenshots, prior art in other tools, anything helpful.
+    validations:
+      required: false

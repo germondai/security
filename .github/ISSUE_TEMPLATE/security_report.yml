@@ -1,0 +1,25 @@
+name: 🔐 Security Report (redirect)
+description: DO NOT use this form to disclose a vulnerability. It opens a PUBLIC issue.
+title: "[DO NOT FILE — use SECURITY.md instead]"
+body:
+  - type: markdown
+    attributes:
+      heading: 🛑 Stop — please don't file security issues here.
+      value: |
+        **This is a public form.** Filing a security issue here exposes the
+        vulnerability to the world before it can be patched.
+
+        ## Use one of the **private** channels in [`SECURITY.md`](../../SECURITY.md):
+
+        1. **GitHub private vulnerability reporting** (preferred):
+           <https://github.com/germondai/security/security/advisories/new>
+        2. **Email / DM** the maintainer — see `SECURITY.md` for the current address.
+
+        We acknowledge private reports within **72 hours** and aim to triage
+        within **7 days**.
+
+        ---
+
+        If you accidentally typed sensitive details here, **close the issue
+        immediately and report it through the private channel instead**. Once
+        closed, the issue is no longer publicly editable.
