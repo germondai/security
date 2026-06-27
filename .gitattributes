@@ -1,0 +1,37 @@
+# Normalize line endings and help GitHub Linguist classify files.
+# https://git-scm.com/docs/gitattributes
+# https://github.com/github/linguist
+
+* text=auto eol=lf
+
+# Source — Linguist should detect these
+*.vue        linguist-detectable=true
+*.ts         linguist-detectable=true
+*.tsx        linguist-detectable=true
+*.js         linguist-detectable=true
+*.mjs        linguist-detectable=true
+*.css        linguist-detectable=true
+*.html       linguist-detectable=true
+
+# Generated / vendored — hide from diffs and language stats
+dist/**              -diff -linguist-generated linguist-generated
+packages/**/dist/**  -diff -linguist-generated linguist-generated
+apps/**/dist/**      -diff -linguist-generated linguist-generated
+.vite/**             -diff -linguist-generated linguist-generated
+.turbo/**            -diff -linguist-generated linguist-generated
+*.tsbuildinfo        linguist-generated
+bun.lock             linguist-generated
+package-lock.json    linguist-generated
+yarn.lock            linguist-generated
+pnpm-lock.yaml       linguist-generated
+
+# Documents Linguist should always count
+LICENSE              linguist-detectable=true
+README.md            linguist-detectable=true
+CHANGELOG.md         linguist-detectable=true
+
+# Force LF for shell scripts and config regardless of platform
+*.sh         eol=lf
+bunfig.toml  eol=lf
+turbo.json   eol=lf
+biome.json   eol=lf
