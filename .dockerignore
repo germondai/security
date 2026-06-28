@@ -56,6 +56,7 @@ Dockerfile*
 docker-compose*.yml
 .dockerignore
 
-# Other apps in the monorepo we don't need for the web build
-apps/cli
+# Other apps in the monorepo (apps/cli) — keep in context so bun install --frozen-lockfile
+# succeeds; the lockfile records apps/cli as a workspace. Their node_modules / dist are
+# excluded above and they are not COPIED into the final image (stage 2 only ships web/dist).
 **/bin

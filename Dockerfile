@@ -10,26 +10,33 @@
 #   docker run --rm -p 8080:80 germondai/security-web
 #
 # The repo-root .dockerignore keeps the context small (no node_modules,
-# no dist, no .git, no apps/cli, no .env).
+# no dist, no .git, no .env). apps/cli is intentionally kept in the context
+# so `bun install --frozen-lockfile` matches the lockfile (which records every
+# workspace). Only apps/web/dist is shipped into the final image.
 
 # ---------- Stage 1: build ----------
 FROM oven/bun:1.3.14-alpine AS builder
 
 WORKDIR /repo
 
-# Copy workspace manifests first for layer caching.
+# Copy workspace manifests + lockfile + turbo config first.
+# Layer caches well: only re-runs install when any of these change.
 COPY package.json bun.lock bunfig.toml turbo.json ./
 COPY packages/tsconfig/package.json          ./packages/tsconfig/package.json
 COPY packages/security/package.json          ./packages/security/package.json
 COPY apps/web/package.json                   ./apps/web/package.json
+COPY apps/cli/package.json                   ./apps/cli/package.json
 
-# Install all workspace deps (frozen lockfile for reproducible builds).
-RUN bun install --frozen-lockfile
-
-# Copy the sources needed for the web build.
+# Copy all workspace sources. The lockfile records every workspace, so every
+# workspace directory must exist on disk for `bun install --frozen-lockfile`
+# to validate. Only apps/web is actually built and shipped to stage 2.
 COPY packages/tsconfig   ./packages/tsconfig
 COPY packages/security   ./packages/security
 COPY apps/web            ./apps/web
+COPY apps/cli            ./apps/cli
+
+# Install all workspace deps (frozen lockfile for reproducible builds).
+RUN bun install --frozen-lockfile
 
 # Build only the web app (turbo runs the dependency graph: tsconfig -> security -> web).
 RUN bun run web:build
