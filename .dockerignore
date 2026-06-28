@@ -1,0 +1,64 @@
+# VCS / IDE
+.git
+.gitignore
+.gitattributes
+.github
+.gitlab
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# Node / Bun artifacts (installed fresh inside the image)
+node_modules
+**/node_modules
+.pnp.*
+
+# Build output (rebuilt inside the image)
+**/dist
+**/.turbo
+**/.vite
+**/.tsbuildinfo
+**/.cache
+**/.next
+**/.nuxt
+**/.svelte-kit
+
+# Test / coverage
+coverage
+**/coverage
+*.lcov
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# Logs / runtime
+logs
+**/*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+bun-debug.log*
+.npm
+.yarn
+
+# Secrets / local env
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Docker (don't recurse)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# apps/cli is irrelevant for the web build — `turbo prune --docker` in stage 1
+# filters the workspace to @germondai/security-web only (apps/cli is not in its
+# dependency graph), so apps/cli source is never copied into the image. Excluding
+# it from the context keeps the COPY in stage 1 fast.
+apps/cli
+**/bin
