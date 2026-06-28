@@ -13,6 +13,11 @@
 # no dist, no .git, no .env). apps/cli is intentionally kept in the context
 # so `bun install --frozen-lockfile` matches the lockfile (which records every
 # workspace). Only apps/web/dist is shipped into the final image.
+#
+# apps/web/src/shims-vue.d.ts is required — Vite 8 dropped the `*.vue`
+# declaration from vite/client, so vue-tsc fails (TS2307) in clean
+# environments without it. The shim is committed to the repo so the Docker
+# build is reproducible.
 
 # ---------- Stage 1: build ----------
 FROM oven/bun:1.3.14-alpine AS builder
